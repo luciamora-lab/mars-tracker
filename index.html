@@ -150,12 +150,17 @@ body{
 
 /* ─ TODAY BANNER ─ */
 .today-banner{
-  display:flex;align-items:center;gap:10px;padding:9px 16px;
   background:linear-gradient(90deg,rgba(232,50,74,.1) 0%,transparent 100%);
   border-bottom:1px solid var(--bd);flex-shrink:0;
 }
+.today-banner-hd{display:flex;align-items:center;gap:10px;padding:9px 16px;cursor:pointer;user-select:none}
+.today-banner-hd:hover{background:rgba(232,50,74,.05)}
 .today-label{font-size:11px;color:var(--red);font-weight:600;display:flex;align-items:center;gap:5px;flex-shrink:0}
+.today-chev{font-size:9px;color:var(--red);margin-left:4px;transition:transform .2s;display:inline-block;opacity:.7}
+.today-banner.ov-closed .today-chev{transform:rotate(-90deg)}
 .overdue-groups{display:flex;gap:10px;flex:1;overflow:hidden;align-items:center;flex-wrap:wrap}
+.today-banner-body{overflow:hidden;transition:max-height .3s cubic-bezier(.4,0,.2,1),padding .3s;padding:0 16px 10px;display:flex;gap:10px;flex-wrap:wrap}
+.today-banner.ov-closed .today-banner-body{max-height:0!important;padding-bottom:0!important}
 .ov-group{display:flex;align-items:center;gap:4px}
 .ov-group-lbl{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:2px 6px;border-radius:4px}
 .ov-group-lbl.copy{background:rgba(79,133,248,.15);color:#4F85F8}
@@ -198,7 +203,7 @@ body{
 .c-cmt{font-size:10px;color:var(--dm);display:flex;align-items:center;gap:2px}
 
 /* ─ BANDWIDTH ─ */
-#vb{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:16px}
+#vb{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:8px}
 .s-title{font-family:'Inter Tight',sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--mu);margin-bottom:10px}
 .bw-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px}
 .bw-card{background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:15px}
@@ -239,7 +244,7 @@ body{
 .cl-bar-fill{height:100%;border-radius:2px;transition:width .8s cubic-bezier(.16,1,.3,1)}
 
 /* ─ FIGMA PANEL ─ */
-#vf{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:14px}
+#vf{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:8px}
 .fig-note{font-size:11px;color:var(--mu);background:rgba(59,59,245,.06);border:1px solid rgba(59,59,245,.18);border-radius:8px;padding:9px 13px;line-height:1.6}
 .fig-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:10px}
 .fig-card{background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px;transition:transform .14s}
@@ -259,7 +264,7 @@ body{
 .skill-callout code{font-size:11px;background:var(--sf2);border-radius:4px;padding:1px 5px;color:var(--fg)}
 
 /* ─ SATISFACTION PANEL ─ */
-#vs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:14px}
+#vs{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:8px}
 .sat-hero{background:linear-gradient(135deg,rgba(0,0,160,.2) 0%,rgba(0,215,185,.1) 100%);border:1px solid var(--bd);border-radius:16px;padding:20px;display:flex;align-items:center;gap:20px}
 .sat-score-ring{position:relative;flex-shrink:0}
 .sat-score-label{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
@@ -304,6 +309,17 @@ body{
 .brand-sat-bar{height:3px;background:var(--sf3);border-radius:2px;margin-top:6px;overflow:hidden}
 .brand-sat-fill{height:100%;border-radius:2px;transition:width .8s cubic-bezier(.16,1,.3,1)}
 .sat-feed-note{font-size:10.5px;color:var(--mu);background:rgba(0,215,185,.04);border:1px solid rgba(0,215,185,.14);border-radius:8px;padding:9px 13px;line-height:1.6}
+
+/* ─ ACCORDION SECTIONS ─ */
+.acc-sec{border:1px solid var(--bd);border-radius:10px;overflow:hidden;background:var(--sf);margin-bottom:0}
+.acc-hd{display:flex;align-items:center;gap:8px;padding:10px 14px;cursor:pointer;user-select:none;transition:background .12s}
+.acc-hd:hover{background:var(--sf2)}
+.acc-hd-title{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--mu);flex:1}
+.acc-hd-ico{font-size:14px;flex-shrink:0}
+.acc-chev{margin-left:4px;font-size:9px;color:var(--dm);transition:transform .22s cubic-bezier(.4,0,.2,1);display:inline-block;flex-shrink:0}
+.acc-sec.closed .acc-chev{transform:rotate(-90deg)}
+.acc-bd{overflow:hidden;transition:max-height .3s cubic-bezier(.4,0,.2,1),padding-bottom .3s;padding:2px 14px 14px}
+.acc-sec.closed .acc-bd{max-height:0!important;padding-bottom:0!important;padding-top:0!important}
 
 /* ─ ANIMATION & SHARED ─ */
 @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
@@ -381,9 +397,18 @@ body{
 
     <!-- BANDWIDTH -->
     <div id="vb" hidden>
-      <div><div class="s-title">Workload by person</div><div class="bw-grid" id="bw-people"></div></div>
-      <div><div class="s-title">Tasks by brand</div><div class="bw-grid" id="bw-brands"></div></div>
-      <div><div class="s-title">Wins &amp; flags</div><div class="notes-grid" id="notes-grid"></div></div>
+      <div class="acc-sec" id="as-bw1">
+        <div class="acc-hd" onclick="toggleSec('as-bw1')"><span class="acc-hd-ico">👥</span><span class="acc-hd-title">Workload by person</span><span class="acc-chev">▾</span></div>
+        <div class="acc-bd"><div class="bw-grid" id="bw-people"></div></div>
+      </div>
+      <div class="acc-sec" id="as-bw2">
+        <div class="acc-hd" onclick="toggleSec('as-bw2')"><span class="acc-hd-ico">📦</span><span class="acc-hd-title">Tasks by brand</span><span class="acc-chev">▾</span></div>
+        <div class="acc-bd"><div class="bw-grid" id="bw-brands"></div></div>
+      </div>
+      <div class="acc-sec" id="as-bw3">
+        <div class="acc-hd" onclick="toggleSec('as-bw3')"><span class="acc-hd-ico">🏆</span><span class="acc-hd-title">Wins &amp; flags</span><span class="acc-chev">▾</span></div>
+        <div class="acc-bd"><div class="notes-grid" id="notes-grid"></div></div>
+      </div>
     </div>
 
     <!-- CLIENTS -->
@@ -391,25 +416,45 @@ body{
 
     <!-- FIGMA -->
     <div id="vf" hidden>
-      <div class="skill-callout">
-        <span style="font-size:28px;flex-shrink:0;margin-top:2px">✏️</span>
-        <div>
-          <h3>figma-note-updated</h3>
-          <p>Once all edits are addressed, trigger this skill to auto-post a completion comment. In Claude Code, type <code>/figma-note-updated</code> or say <em>"mark this Figma frame as edit-complete."</em> Created 2026-10-15.</p>
+      <div class="acc-sec" id="as-vf-skill">
+        <div class="acc-hd" onclick="toggleSec('as-vf-skill')"><span class="acc-hd-ico">✏️</span><span class="acc-hd-title">figma-note-updated skill</span><span class="acc-chev">▾</span></div>
+        <div class="acc-bd">
+          <div class="skill-callout" style="margin:0">
+            <span style="font-size:28px;flex-shrink:0;margin-top:2px">✏️</span>
+            <div>
+              <h3>figma-note-updated</h3>
+              <p>Once all edits are addressed, trigger this skill to auto-post a completion comment. In Claude Code, type <code>/figma-note-updated</code> or say <em>"mark this Figma frame as edit-complete."</em> Created 2026-10-15.</p>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="fig-note">⚠ Real-time Figma change detection requires the GitHub Actions pipeline. Until then, open each brand file manually — the tracker logs your last visit per brand.</div>
-      <div class="fig-grid" id="fig-grid"></div>
+      <div class="acc-sec" id="as-vf-note">
+        <div class="acc-hd" onclick="toggleSec('as-vf-note')"><span class="acc-hd-ico">⚠</span><span class="acc-hd-title">Real-time detection</span><span class="acc-chev">▾</span></div>
+        <div class="acc-bd"><div class="fig-note" style="margin:0">⚠ Real-time Figma change detection requires the GitHub Actions pipeline. Until then, open each brand file manually — the tracker logs your last visit per brand.</div></div>
+      </div>
+      <div class="acc-sec" id="as-vf-grid">
+        <div class="acc-hd" onclick="toggleSec('as-vf-grid')"><span class="acc-hd-ico">🔗</span><span class="acc-hd-title">Brand Figma files</span><span class="acc-chev">▾</span></div>
+        <div class="acc-bd"><div class="fig-grid" id="fig-grid"></div></div>
+      </div>
     </div>
 
     <!-- SATISFACTION -->
     <div id="vs" hidden>
-      <div class="sat-feed-note">📊 Metrics are calculated from Asana task data — delivery rates, comment counts, and review cycles update automatically when the GitHub Actions sync runs. Comment sentiment feed ingests positive and negative notes from all task comments across Copy, Design, and Development processes.</div>
-      <div class="sat-hero" id="sat-hero"></div>
-      <div class="sat-grid" id="sat-grid"></div>
-      <div>
-        <div class="s-title">Brand satisfaction</div>
-        <div class="brand-sat-grid" id="brand-sat-grid"></div>
+      <div class="acc-sec" id="as-vs-note">
+        <div class="acc-hd" onclick="toggleSec('as-vs-note')"><span class="acc-hd-ico">📊</span><span class="acc-hd-title">Data sources</span><span class="acc-chev">▾</span></div>
+        <div class="acc-bd"><div class="sat-feed-note" style="margin:0">📊 Metrics are calculated from Asana task data — delivery rates, comment counts, and review cycles update automatically when the GitHub Actions sync runs. Comment sentiment feed ingests positive and negative notes from all task comments across Copy, Design, and Development processes.</div></div>
+      </div>
+      <div class="acc-sec" id="as-vs-hero">
+        <div class="acc-hd" onclick="toggleSec('as-vs-hero')"><span class="acc-hd-ico">🎯</span><span class="acc-hd-title">Composite score</span><span class="acc-chev">▾</span></div>
+        <div class="acc-bd"><div class="sat-hero" id="sat-hero"></div></div>
+      </div>
+      <div class="acc-sec" id="as-vs-grid">
+        <div class="acc-hd" onclick="toggleSec('as-vs-grid')"><span class="acc-hd-ico">⚙️</span><span class="acc-hd-title">Process &amp; approval</span><span class="acc-chev">▾</span></div>
+        <div class="acc-bd"><div class="sat-grid" id="sat-grid"></div></div>
+      </div>
+      <div class="acc-sec" id="as-vs-brands">
+        <div class="acc-hd" onclick="toggleSec('as-vs-brands')"><span class="acc-hd-ico">🐾</span><span class="acc-hd-title">Brand satisfaction</span><span class="acc-chev">▾</span></div>
+        <div class="acc-bd"><div class="brand-sat-grid" id="brand-sat-grid"></div></div>
       </div>
     </div>
   </main>
@@ -504,6 +549,40 @@ const COMMENT_FEED = [
   {brand:'NTR',text:'Enrichment fully cleared INT and EXT. Great delivery!',sent:'pos',who:'Client',date:'Oct 10'},
   {brand:'IAM',text:'Dog T1 + T2a-b both cleared — smooth process this cycle.',sent:'pos',who:'Brand Team',date:'Oct 9'},
 ];
+
+// ─── ACCORDION STATE ──────────────────────────────────────────────────────
+let collapsedSecs=new Set();
+try{collapsedSecs=new Set(JSON.parse(localStorage.getItem('mars-collapsed-secs')||'[]'));}catch(e){}
+
+function toggleSec(id){
+  const sec=document.getElementById(id);
+  if(!sec) return;
+  const body=sec.querySelector('.acc-bd');
+  const isOpen=!sec.classList.contains('closed');
+  if(isOpen){
+    body.style.maxHeight=body.scrollHeight+'px';
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{body.style.maxHeight='0';body.style.paddingBottom='0';}));
+    sec.classList.add('closed');
+    collapsedSecs.add(id);
+  } else {
+    sec.classList.remove('closed');
+    body.style.maxHeight=body.scrollHeight+'px';
+    body.style.paddingBottom='';
+    body.addEventListener('transitionend',()=>{body.style.maxHeight='';},{once:true});
+    collapsedSecs.delete(id);
+  }
+  try{localStorage.setItem('mars-collapsed-secs',JSON.stringify([...collapsedSecs]));}catch(e){}
+}
+
+function initAccordions(){
+  document.querySelectorAll('.acc-sec[id]').forEach(sec=>{
+    if(collapsedSecs.has(sec.id)){
+      sec.classList.add('closed');
+      const body=sec.querySelector('.acc-bd');
+      if(body) body.style.maxHeight='0';
+    }
+  });
+}
 
 // ─── STATE ────────────────────────────────────────────────────────────────
 let activeBrand='ALL', activeType='ALL', spotlightOn=false;
@@ -608,13 +687,39 @@ function renderToday(){
     return `<div class="ov-group"><span class="ov-group-lbl ${cls}">${label} (${items.length})</span>${chips}</div>`;
   }
 
+  const isClosedOv = collapsedSecs.has('ov-banner');
+  if(isClosedOv) banner.classList.add('ov-closed'); else banner.classList.remove('ov-closed');
+
+  const bodyHtml = groupHtml(ovCopy,'copy','Copy') + groupHtml(ovDesign,'design','Design') + groupHtml(ovDev,'dev','Dev');
+
   banner.innerHTML=`
-    <span class="today-label">🔴 Overdue</span>
-    <div class="overdue-groups">
-      ${groupHtml(ovCopy,'copy','Copy')}
-      ${groupHtml(ovDesign,'design','Design')}
-      ${groupHtml(ovDev,'dev','Dev')}
-    </div>`;
+    <div class="today-banner-hd" onclick="toggleOvBanner()">
+      <span class="today-label">🔴 Overdue <span style="color:var(--dm);font-weight:400">(${ovAll.length})</span></span>
+      <div style="flex:1;display:flex;gap:8px;overflow:hidden;align-items:center">
+        ${isClosedOv?`<span style="font-size:10px;color:var(--mu);font-weight:500">${ovCopy.length?`Copy: ${ovCopy.length} `:''} ${ovDesign.length?`Design: ${ovDesign.length} `:''} ${ovDev.length?`Dev: ${ovDev.length}`:''}</span>`:''}
+      </div>
+      <span class="today-chev">▾</span>
+    </div>
+    <div class="today-banner-body" ${isClosedOv?'style="max-height:0;padding-bottom:0"':''}>${bodyHtml}</div>`;
+}
+function toggleOvBanner(){
+  const banner=document.getElementById('today-banner');
+  const body=banner.querySelector('.today-banner-body');
+  const isOpen=!banner.classList.contains('ov-closed');
+  if(isOpen){
+    body.style.maxHeight=body.scrollHeight+'px';
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{body.style.maxHeight='0';body.style.paddingBottom='0';}));
+    banner.classList.add('ov-closed');
+    collapsedSecs.add('ov-banner');
+  } else {
+    banner.classList.remove('ov-closed');
+    body.style.maxHeight=body.scrollHeight+'px';
+    body.style.paddingBottom='';
+    body.addEventListener('transitionend',()=>{body.style.maxHeight='';},{ once:true });
+    collapsedSecs.delete('ov-banner');
+  }
+  try{localStorage.setItem('mars-collapsed-secs',JSON.stringify([...collapsedSecs]));}catch(e){}
+  setTimeout(renderToday,20);
 }
 
 // ─── SIDEBAR ─────────────────────────────────────────────────────────────
@@ -1020,7 +1125,7 @@ async function loadLiveData() {
 }
 
 // ─── INIT ─────────────────────────────────────────────────────────────────
-function render(){renderStats();renderToday();renderSidebar();renderKanban();renderBandwidth();renderClients();renderFigmaGrid();}
+function render(){renderStats();renderToday();renderSidebar();renderKanban();renderBandwidth();renderClients();renderFigmaGrid();initAccordions();}
 loadSyncTime();
 loadLiveData().then(render);
 </script>
