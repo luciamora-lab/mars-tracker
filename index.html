@@ -1,393 +1,367 @@
 <title>Mars Creative Tracker</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@500;600;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
 <style>
-/* ─ Mars brand: cobalt #0000A0 / teal #00D7B9 / dark navy palette ─ */
-:root {
-  --bg:    #05060F;
-  --sf:    #0A0C1B;
-  --sf2:   #0E1228;
-  --sf3:   #141A35;
-  --bd:    #1C2645;
-  --bd2:   #263055;
-
-  --mars:  #0000A0;
-  --acc:   #3B3BF5;
-  --acc-l: #5B5BFF;
-  --teal:  #00D7B9;
-  --teal-d:#00A890;
-
-  --fg:    #DDE3FF;
-  --fg2:   #B8C2E8;
-  --mu:    #4A5880;
-  --dm:    #232D50;
-
-  --red:   #E8324A;
-  --amber: #F5A623;
-
-  --csr:#4F85F8; --csr-bg:#0D1835;
-  --grn:#3FBB68; --grn-bg:#081E10;
-  --iam:#FF7A52; --iam-bg:#200D08;
-  --ped:#E85560; --ped-bg:#1E080C;
-  --ntr:#C49B6C; --ntr-bg:#1A1208;
-  --shb:#AB7DFF; --shb-bg:#130B28;
-  --tem:#F5A823; --tem-bg:#1E1408;
-
-  color-scheme: dark;
+:root{
+  --bg:#FFFFFF;--sb:#F8F8F8;--sb-bd:#EBEBEB;
+  --card:#FFFFFF;--card2:#F4F4F5;
+  --bd:#E5E5E5;--bd2:#CFCFCF;
+  --acc:#3B3BF5;--acc-l:#5B5BFF;--acc-bg:rgba(59,59,245,.07);
+  --fg:#1A1A1A;--fg2:#444;--mu:#808080;--dm:#BCBCBC;
+  --red:#E8324A;--amber:#F5A623;
+  color-scheme:light;
+}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#111113;--sb:#18191E;--sb-bd:#26272E;
+  --card:#1C1D24;--card2:#1A1B22;--bd:#26272E;--bd2:#35363F;
+  --fg:#EBEBEB;--fg2:#B8B8CC;--mu:#6B6B8A;--dm:#3A3B4E;
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#111113;--sb:#18191E;--sb-bd:#26272E;
+  --card:#1C1D24;--card2:#1A1B22;--bd:#26272E;--bd2:#35363F;
+  --fg:#EBEBEB;--fg2:#B8B8CC;--mu:#6B6B8A;--dm:#3A3B4E;
+  color-scheme:dark;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
-body{
-  background:var(--bg);color:var(--fg);
-  font-family:'Inter',system-ui,sans-serif;font-size:13px;line-height:1.5;
-  overflow:hidden;
-  padding-left:max(0px,env(safe-area-inset-left,0px));
-  padding-right:max(0px,env(safe-area-inset-right,0px));
-}
+body{background:var(--bg);color:var(--fg);font-family:'Inter',system-ui,sans-serif;font-size:13px;line-height:1.5;overflow:hidden;padding-left:max(0px,env(safe-area-inset-left,0px));padding-right:max(0px,env(safe-area-inset-right,0px))}
 
-/* ─ LAYOUT ─ */
-.app{display:grid;grid-template-columns:220px 1fr;grid-template-rows:56px 1fr;height:100%}
+/* ── LAYOUT ── */
+.app{display:flex;height:100%}
 
-/* ─ TOP BAR ─ */
-.topbar{
-  grid-column:1/-1;
-  background:linear-gradient(90deg,#05060F 0%,#080B20 60%,#060916 100%);
-  border-bottom:1px solid var(--bd);
-  display:flex;align-items:center;gap:10px;padding:0 16px;
-  position:sticky;top:env(safe-area-inset-top,0px);z-index:20;
-}
-.lockup{display:flex;align-items:center;gap:10px;flex-shrink:0}
-
-/* ─ MARS M LOGO ─ updated to split-color proposal */
-.mars-m{
-  width:40px;height:40px;border-radius:10px;flex-shrink:0;
-  background:#fff;
-  display:flex;align-items:center;justify-content:center;
-  box-shadow:0 0 16px rgba(0,0,160,.3);
-  overflow:hidden;
-}
-.mars-m svg{width:30px;height:20px}
-
-.brand-name{font-family:'Inter Tight',sans-serif;font-size:15px;font-weight:800;letter-spacing:-0.4px;color:var(--fg)}
-.brand-sub{font-size:9.5px;color:var(--mu);margin-top:-1px;display:flex;align-items:center;gap:4px}
-.pulse{width:5px;height:5px;border-radius:50%;background:var(--teal);box-shadow:0 0 8px var(--teal);animation:pls 2s infinite}
-@keyframes pls{0%,100%{opacity:1}50%{opacity:.4}}
-
-.chips{display:flex;gap:5px;flex:1;overflow:hidden}
-.chip{display:flex;align-items:center;gap:6px;background:var(--sf2);border:1px solid var(--bd);border-radius:7px;padding:5px 11px;font-size:11px;white-space:nowrap;cursor:default}
-.chip-n{font-family:'Inter Tight',sans-serif;font-size:15px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1}
-.chip-l{font-size:10px;color:var(--mu);margin-top:1px}
-.chip-inner{display:flex;flex-direction:column}
-.chip.danger .chip-n{color:var(--red)}
-.chip.ok .chip-n{color:var(--teal)}
-.chip.warn .chip-n{color:var(--amber)}
-.chip.acc .chip-n{color:var(--acc-l)}
-
-.topbar-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
-.tabs{display:flex;background:var(--sf2);border:1px solid var(--bd);border-radius:8px;padding:3px}
-.tab{background:none;border:none;color:var(--mu);font:12px 'Inter',sans-serif;padding:5px 11px;border-radius:5px;cursor:pointer;transition:all .15s;white-space:nowrap}
-.tab.on{background:var(--acc);color:#fff;font-weight:600;box-shadow:0 2px 10px rgba(59,59,245,.4)}
-
-/* Spotlight button */
-.spotlight-btn{display:flex;align-items:center;gap:5px;background:none;border:1px solid var(--bd);border-radius:7px;color:var(--mu);font:11px 'Inter',sans-serif;padding:5px 10px;cursor:pointer;transition:all .2s;white-space:nowrap}
-.spotlight-btn:hover{background:rgba(171,125,255,.1);border-color:rgba(171,125,255,.4);color:#AB7DFF}
-.spotlight-btn.spotlight-on{background:rgba(171,125,255,.18);border-color:#AB7DFF;color:#AB7DFF;box-shadow:0 0 12px rgba(171,125,255,.3)}
-.spotlight-dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0}
-/* Hide-col button on kanban column headers */
-.col-hide-btn{background:none;border:none;color:var(--dm);font-size:10px;cursor:pointer;padding:2px 4px;border-radius:3px;line-height:1;transition:color .12s,background .12s}
-.col-hide-btn:hover{background:var(--sf3);color:var(--fg2)}
-.col-show-strip{display:flex;align-items:center;justify-content:center;width:28px;flex-shrink:0;background:var(--sf);border:1px solid var(--bd);border-radius:8px;cursor:pointer;writing-mode:vertical-rl;font-size:9.5px;font-weight:700;color:var(--dm);letter-spacing:.06em;transition:background .12s,color .12s;padding:10px 0}
-.col-show-strip:hover{background:var(--sf2);color:var(--fg2)}
-.refresh-wrap{display:flex;flex-direction:column;align-items:flex-end}
-.refresh-btn{display:flex;align-items:center;gap:5px;background:none;border:1px solid var(--bd);border-radius:7px;color:var(--mu);font:11px 'Inter',sans-serif;padding:5px 10px;cursor:pointer;transition:all .15s}
-.refresh-btn:hover{background:var(--sf3);color:var(--fg);border-color:var(--bd2)}
-.refresh-btn:disabled{opacity:.4;cursor:not-allowed}
-.refresh-btn.spinning .ri{animation:spin .7s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-.ri{display:inline-block}
-.last-sync{font-size:9px;color:var(--dm);text-align:right;margin-top:2px}
-
-/* ─ SIDEBAR ─ */
-.sidebar{
-  background:var(--sf);border-right:1px solid var(--bd);
-  overflow-y:auto;padding:14px 10px;display:flex;flex-direction:column;gap:14px;
-  background-image:url("data:image/svg+xml,%3Csvg width='80' height='80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg opacity='.04' fill='%23fff'%3E%3Cellipse cx='34' cy='50' rx='14' ry='12'/%3E%3Cellipse cx='16' cy='30' rx='6' ry='7'/%3E%3Cellipse cx='30' cy='22' rx='6' ry='7'/%3E%3Cellipse cx='42' cy='22' rx='6' ry='7'/%3E%3Cellipse cx='56' cy='30' rx='6' ry='7'/%3E%3C/g%3E%3C/svg%3E");
-  background-size:80px 80px;
-}
+/* ── SIDEBAR ── */
+.sidebar{width:200px;flex-shrink:0;background:var(--sb);border-right:1px solid var(--sb-bd);display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden}
 .sidebar::-webkit-scrollbar{width:3px}
 .sidebar::-webkit-scrollbar-thumb{background:var(--bd);border-radius:2px}
-.g-lbl{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--dm);padding:0 7px;margin-bottom:4px}
-.pill-list{display:flex;flex-direction:column;gap:1px}
-.pill{display:flex;align-items:center;gap:8px;background:none;border:none;color:var(--mu);font:12px 'Inter',sans-serif;padding:7px 8px;border-radius:8px;cursor:pointer;text-align:left;width:100%;transition:background .12s,color .12s}
-.pill:hover{background:var(--sf2);color:var(--fg2)}
-.pill.on{background:rgba(59,59,245,.15);color:var(--fg);border:1px solid rgba(59,59,245,.25)}
-.pill:not(.on){border:1px solid transparent}
-.pdot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.pn{flex:1;font-size:11.5px}
-.pc{font-size:10px;background:var(--sf3);border-radius:4px;padding:1px 6px;font-variant-numeric:tabular-nums;color:var(--dm);font-family:'Inter Tight',sans-serif;font-weight:600}
-.pill.on .pc{color:var(--mu)}
-.sp-icon{font-size:12px;line-height:1}
+.sb-logo{display:flex;align-items:center;gap:9px;padding:15px 14px 12px;border-bottom:1px solid var(--sb-bd);flex-shrink:0}
+.sb-logo-sq{width:28px;height:28px;background:#1A1A1A;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#fff;flex-shrink:0}
+.sb-logo-text{font-size:11.5px;font-weight:700;letter-spacing:.04em;color:var(--fg)}
+.sb-logo-sub{font-size:9.5px;color:var(--mu);margin-top:-1px}
+.sb-workspace{padding:9px 14px;border-bottom:1px solid var(--sb-bd);flex-shrink:0}
+.sb-ws-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--dm);margin-bottom:2px}
+.sb-ws-name{font-size:12px;font-weight:600;color:var(--fg2)}
+.sb-nav{padding:8px;border-bottom:1px solid var(--sb-bd);flex-shrink:0}
+.nav-item{display:flex;align-items:center;gap:8px;width:100%;border:none;background:none;color:var(--mu);font:12.5px 'Inter',sans-serif;padding:7px 8px;border-radius:8px;cursor:pointer;text-align:left;transition:background .12s,color .12s;margin-bottom:1px}
+.nav-item:hover{background:rgba(0,0,0,.04);color:var(--fg2)}
+.nav-item.on{background:var(--acc-bg);color:var(--acc);font-weight:600}
+.nav-icon{width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;opacity:.8}
+.sb-brands{padding:8px;flex:1}
+.sb-sec-hd{display:flex;align-items:center;justify-content:space-between;padding:0 6px;margin-bottom:5px}
+.sb-sec-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--dm)}
+.brand-item{display:flex;align-items:center;gap:7px;padding:5px 8px;border-radius:6px;cursor:pointer;border:none;background:none;width:100%;text-align:left;font:12px 'Inter',sans-serif;color:var(--fg2);transition:background .12s}
+.brand-item:hover{background:rgba(0,0,0,.04)}
+.brand-item.on{background:var(--acc-bg);color:var(--fg);font-weight:500}
+.brand-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.brand-item-name{flex:1;font-size:12px}
+.brand-item-cnt{font-size:10.5px;color:var(--dm);font-variant-numeric:tabular-nums}
+.sb-footer{border-top:1px solid var(--sb-bd);padding:10px 14px 14px;flex-shrink:0}
+.sb-help{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--mu);padding:4px 0;margin-bottom:8px;cursor:pointer}
+.sb-help:hover{color:var(--fg2)}
+.sb-user{display:flex;align-items:center;gap:8px}
+.sb-user-av{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;flex-shrink:0}
+.sb-user-name{font-size:11.5px;font-weight:600;color:var(--fg2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sb-user-role{font-size:9.5px;color:var(--mu)}
 
-.skill-pill{display:flex;align-items:center;gap:8px;background:rgba(0,215,185,.07);border:1px solid rgba(0,215,185,.18);border-radius:9px;padding:9px 10px;cursor:pointer;transition:background .12s;margin:0 1px}
-.skill-pill:hover{background:rgba(0,215,185,.13)}
-.skill-pill .sk-name{font-size:11.5px;font-weight:600;color:var(--teal)}
-.skill-pill .sk-sub{font-size:9px;color:var(--mu);margin-top:1px}
-.skill-pill .sk-ico{font-size:18px;flex-shrink:0}
+/* ── MAIN ── */
+.main{flex:1;overflow:hidden;display:flex;flex-direction:column;min-width:0}
+.breadbar{display:flex;align-items:center;height:44px;padding:0 18px;border-bottom:1px solid var(--bd);background:var(--bg);flex-shrink:0;gap:10px}
+.breadcrumb{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--mu);white-space:nowrap;flex-shrink:0}
+.breadcrumb-sep{color:var(--dm)}
+.breadcrumb-curr{color:var(--fg2);font-weight:500}
+.stats-row{display:flex;gap:10px;align-items:center;flex:1}
+.stat-chip{display:flex;align-items:center;gap:4px;font-size:11.5px;color:var(--mu);white-space:nowrap}
+.stat-n{font-weight:700;font-variant-numeric:tabular-nums}
+.stat-n.danger{color:var(--red)}.stat-n.ok{color:#3FBB68}.stat-n.warn{color:var(--amber)}.stat-n.acc{color:var(--acc)}
+.topbar-actions{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.action-btn{display:flex;align-items:center;gap:5px;background:none;border:1px solid var(--bd);border-radius:7px;color:var(--mu);font:11.5px 'Inter',sans-serif;padding:5px 10px;cursor:pointer;transition:all .15s;white-space:nowrap}
+.action-btn:hover{background:var(--card2);color:var(--fg2)}
+.action-btn.on{background:var(--acc-bg);border-color:rgba(59,59,245,.25);color:var(--acc)}
+.refresh-wrap{display:flex;flex-direction:column;align-items:flex-end}
+.last-sync{font-size:9px;color:var(--dm);text-align:right;margin-top:1px}
+.refresh-btn.spinning .ri{animation:spin .7s linear infinite;display:inline-block}
+@keyframes spin{to{transform:rotate(360deg)}}
+.search-box{display:flex;align-items:center;gap:7px;background:var(--card2);border:1px solid var(--bd);border-radius:7px;padding:5px 10px;font-size:11.5px;color:var(--mu);min-width:170px;cursor:text}
+.search-kbd{background:var(--bd);border-radius:3px;padding:1px 5px;font-size:10px;color:var(--dm);margin-left:auto}
+.bell-btn{background:none;border:1px solid var(--bd);border-radius:7px;padding:5px 8px;cursor:pointer;color:var(--mu);font-size:13px}
+.bell-btn:hover{background:var(--card2)}
 
-.person-av{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;flex-shrink:0;border:2px solid var(--bd)}
-.person-name{flex:1;font-size:12px;color:var(--mu)}
-.person-n{font-family:'Inter Tight',sans-serif;font-size:11px;font-weight:600;color:var(--dm)}
-.person-row{display:flex;align-items:center;gap:8px;padding:5px 8px}
-/* compact avatar grid for large teams */
-.team-grid{display:flex;flex-wrap:wrap;gap:6px;padding:4px 8px}
-.team-av-wrap{display:flex;flex-direction:column;align-items:center;gap:2px;cursor:default}
-.team-av-wrap .person-av{width:30px;height:30px;font-size:8.5px}
-.team-av-name{font-size:8px;color:var(--dm);text-align:center;max-width:32px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* ── VIEWS ── */
+#vk{flex:1;overflow:hidden;display:flex;flex-direction:column}
+#vb{flex:1;overflow-y:auto}
+#vc{flex:1;overflow-y:auto;padding:20px 22px}
+#vf{flex:1;overflow-y:auto;padding:20px 22px;display:flex;flex-direction:column;gap:12px}
+#vs{flex:1;overflow-y:auto;padding:20px 22px;display:flex;flex-direction:column;gap:12px}
 
-/* ─ MAIN ─ */
-.main{overflow:hidden;display:flex;flex-direction:column}
-
-/* ─ TODAY BANNER ─ */
-.today-banner{
-  background:linear-gradient(90deg,rgba(232,50,74,.1) 0%,transparent 100%);
-  border-bottom:1px solid var(--bd);flex-shrink:0;
-}
-.today-banner-hd{display:flex;align-items:center;gap:10px;padding:9px 16px;cursor:pointer;user-select:none}
-.today-banner-hd:hover{background:rgba(232,50,74,.05)}
+/* ── TODAY BANNER ── */
+.today-banner{border-bottom:1px solid var(--bd);background:rgba(232,50,74,.03);flex-shrink:0}
+.today-banner-hd{display:flex;align-items:center;gap:10px;padding:7px 16px;cursor:pointer;user-select:none}
+.today-banner-hd:hover{background:rgba(232,50,74,.03)}
 .today-label{font-size:11px;color:var(--red);font-weight:600;display:flex;align-items:center;gap:5px;flex-shrink:0}
 .today-chev{font-size:9px;color:var(--red);margin-left:4px;transition:transform .2s;display:inline-block;opacity:.7}
 .today-banner.ov-closed .today-chev{transform:rotate(-90deg)}
-.overdue-groups{display:flex;gap:10px;flex:1;overflow:hidden;align-items:center;flex-wrap:wrap}
-.today-banner-body{overflow:hidden;transition:max-height .3s cubic-bezier(.4,0,.2,1),padding .3s;padding:0 16px 10px;display:flex;gap:10px;flex-wrap:wrap}
+.today-banner-body{overflow:hidden;transition:max-height .3s cubic-bezier(.4,0,.2,1),padding .3s;padding:0 16px 9px;display:flex;gap:10px;flex-wrap:wrap}
 .today-banner.ov-closed .today-banner-body{max-height:0!important;padding-bottom:0!important}
 .ov-group{display:flex;align-items:center;gap:4px}
 .ov-group-lbl{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:2px 6px;border-radius:4px}
-.ov-group-lbl.copy{background:rgba(79,133,248,.15);color:#4F85F8}
-.ov-group-lbl.design{background:rgba(171,125,255,.15);color:#AB7DFF}
-.ov-group-lbl.dev{background:rgba(245,168,35,.15);color:#F5A823}
-.urg-chip{display:flex;align-items:center;gap:5px;background:rgba(232,50,74,.1);border:1px solid rgba(232,50,74,.25);border-radius:5px;padding:3px 8px;font-size:10.5px;color:var(--red);white-space:nowrap}
+.ov-group-lbl.copy{background:rgba(79,133,248,.12);color:#4F85F8}
+.ov-group-lbl.design{background:rgba(171,125,255,.12);color:#AB7DFF}
+.ov-group-lbl.dev{background:rgba(245,168,35,.12);color:#F5A823}
+.urg-chip{display:flex;align-items:center;gap:5px;background:rgba(232,50,74,.07);border:1px solid rgba(232,50,74,.18);border-radius:5px;padding:3px 8px;font-size:10.5px;color:var(--red);white-space:nowrap}
 
-/* ─ KANBAN ─ */
-#vk{flex:1;overflow:hidden;display:flex;flex-direction:column}
+/* ── KANBAN ── */
 .k-scroll{flex:1;overflow-x:auto;overflow-y:hidden;padding:14px}
 .k-track{display:flex;gap:10px;height:100%;min-width:max-content}
 .col{width:230px;flex-shrink:0;display:flex;flex-direction:column}
 .col-h{display:flex;align-items:center;gap:7px;padding-bottom:10px;margin-bottom:10px;border-bottom:2px solid}
-.col-h-lbl{font-size:12px;font-weight:700;flex:1;font-family:'Inter Tight',sans-serif}
-.col-h-n{font-size:10px;background:var(--sf3);color:var(--mu);padding:2px 7px;border-radius:8px;font-variant-numeric:tabular-nums;font-weight:600}
+.col-h-lbl{font-size:12px;font-weight:700;flex:1}
+.col-h-n{font-size:10px;background:var(--card2);border:1px solid var(--bd);color:var(--mu);padding:2px 7px;border-radius:8px;font-variant-numeric:tabular-nums;font-weight:600}
 .col-b{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:6px}
 .col-b::-webkit-scrollbar{width:3px}
 .col-b::-webkit-scrollbar-thumb{background:var(--bd);border-radius:2px}
 .empty-col{border:1px dashed var(--bd);border-radius:9px;display:flex;align-items:center;justify-content:center;height:70px;font-size:11px;color:var(--dm)}
-
-.card{
-  background:var(--sf);border:1px solid var(--bd);border-left:3px solid;
-  border-radius:9px;padding:10px 10px 9px 9px;cursor:pointer;
-  transition:transform .14s,box-shadow .14s,border-color .14s;
-}
-.card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.4)}
-.c-name{font-size:11.5px;font-weight:600;margin-bottom:7px;line-height:1.35;font-family:'Inter Tight',sans-serif}
+.card{background:var(--card);border:1px solid var(--bd);border-left:3px solid;border-radius:9px;padding:10px 10px 9px 9px;cursor:pointer;transition:transform .14s,box-shadow .14s}
+.card:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.07)}
+.c-name{font-size:11.5px;font-weight:600;margin-bottom:7px;line-height:1.35}
 .c-tags{display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin-bottom:7px}
-.b-tag{font-size:9px;font-weight:800;padding:2px 6px;border-radius:4px;letter-spacing:.05em}
-.t-tag{font-size:9.5px;color:var(--mu);background:var(--sf2);padding:2px 6px;border-radius:4px}
-.ss-tag{font-size:9.5px;font-weight:600;padding:2px 6px;border-radius:4px;background:rgba(255,122,82,.12);color:#FF7A52}
+.b-tag{font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;letter-spacing:.04em}
+.t-tag{font-size:9.5px;color:var(--mu);background:var(--card2);border:1px solid var(--bd);padding:2px 6px;border-radius:4px}
+.ss-tag{font-size:9.5px;font-weight:600;padding:2px 6px;border-radius:4px;background:rgba(255,122,82,.1);color:#FF7A52}
 .sp-tag{font-size:11px;line-height:1}
-.int-t{font-size:9px;font-weight:700;padding:2px 5px;border-radius:4px;background:rgba(59,59,245,.15);color:var(--acc-l)}
-.ext-t{font-size:9px;font-weight:700;padding:2px 5px;border-radius:4px;background:rgba(0,215,185,.12);color:var(--teal)}
-.ext-t.pending{background:rgba(30,38,69,.6);color:var(--dm)}
+.ov-tag{font-size:9px;font-weight:700;padding:2px 5px;border-radius:4px;background:rgba(232,50,74,.1);color:var(--red)}
+.int-t{font-size:9px;font-weight:700;padding:2px 5px;border-radius:4px;background:rgba(59,59,245,.1);color:var(--acc)}
+.ext-t{font-size:9px;font-weight:700;padding:2px 5px;border-radius:4px;background:rgba(63,187,104,.1);color:#3FBB68}
+.ext-t.pending{background:var(--card2);color:var(--dm)}
 .c-foot{display:flex;align-items:center;gap:5px}
-.mav{width:17px;height:17px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:700;color:#fff;flex-shrink:0}
+.mav{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:700;color:#fff;flex-shrink:0}
 .c-due{font-size:10px;color:var(--dm);font-variant-numeric:tabular-nums;margin-left:auto}
 .c-due.ov{color:var(--red)}
-.c-cmt{font-size:10px;color:var(--dm);display:flex;align-items:center;gap:2px}
+.c-cmt{font-size:10px;color:var(--mu);display:flex;align-items:center;gap:2px}
+.col-hide-btn{background:none;border:none;color:var(--dm);font-size:10px;cursor:pointer;padding:2px 4px;border-radius:3px;transition:color .12s,background .12s}
+.col-hide-btn:hover{background:var(--card2);color:var(--fg2)}
+.col-show-strip{display:flex;align-items:center;justify-content:center;width:28px;flex-shrink:0;background:var(--card2);border:1px solid var(--bd);border-radius:8px;cursor:pointer;writing-mode:vertical-rl;font-size:9.5px;font-weight:700;color:var(--dm);letter-spacing:.06em;transition:background .12s,color .12s;padding:10px 0}
+.col-show-strip:hover{background:var(--bd);color:var(--fg2)}
 
-/* ─ BANDWIDTH ─ */
-#vb{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:8px}
-.s-title{font-family:'Inter Tight',sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--mu);margin-bottom:10px}
-.bw-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px}
-.bw-card{background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:15px}
-.bw-title{font-family:'Inter Tight',sans-serif;font-size:13px;font-weight:700;margin-bottom:13px;color:var(--fg2)}
-.bars{display:flex;flex-direction:column;gap:10px}
-.br{display:flex;align-items:center;gap:9px}
-.br-lbl{width:120px;font-size:11px;color:var(--mu);flex-shrink:0}
-.br-trk{flex:1;height:6px;background:var(--sf3);border-radius:3px;overflow:hidden}
-.br-fill{height:100%;border-radius:3px;transition:width .6s cubic-bezier(.16,1,.3,1)}
-.br-val{width:28px;font-family:'Inter Tight',sans-serif;font-size:12px;font-weight:600;color:var(--fg2);text-align:right;font-variant-numeric:tabular-nums}
-.notes-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.note-card{background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:15px}
-.note-title{font-family:'Inter Tight',sans-serif;font-size:13px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:7px;color:var(--fg2)}
-.note-item{font-size:12px;color:var(--mu);padding:7px 0;border-bottom:1px solid var(--bd);display:flex;align-items:flex-start;gap:7px;line-height:1.45}
-.note-item:last-child{border-bottom:none}
+/* ── BANDWIDTH ── */
+.bw-page{padding:22px 24px 28px}
+.bw-page-hd{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:4px}
+.bw-h1{font-size:24px;font-weight:700;color:var(--fg);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.bw-badge{font-size:11px;font-weight:500;background:var(--card2);border:1px solid var(--bd);border-radius:12px;padding:2px 10px;color:var(--mu)}
+.bw-subtitle{font-size:13px;color:var(--mu);margin-bottom:22px}
+.bw-filters{display:flex;gap:8px;flex-shrink:0}
+.bw-filter-btn{display:flex;align-items:center;gap:5px;background:var(--card);border:1px solid var(--bd);border-radius:8px;font:12px 'Inter',sans-serif;color:var(--fg2);padding:6px 12px;cursor:pointer;transition:background .12s;white-space:nowrap}
+.bw-filter-btn:hover{background:var(--card2)}
+.members-section{margin-bottom:20px}
+.members-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--dm);margin-bottom:10px}
+.member-cards-row{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px}
+.member-cards-row::-webkit-scrollbar{height:3px}
+.member-cards-row::-webkit-scrollbar-thumb{background:var(--bd);border-radius:2px}
+.member-card{display:flex;flex-direction:column;align-items:center;background:var(--card);border:1.5px solid var(--bd);border-radius:12px;padding:14px 14px 11px;cursor:pointer;min-width:86px;transition:border-color .15s,box-shadow .15s;flex-shrink:0}
+.member-card:hover{border-color:var(--bd2);box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.member-card.selected{border-color:var(--acc);box-shadow:0 0 0 3px rgba(59,59,245,.1)}
+.member-av-wrap{position:relative;margin-bottom:7px}
+.member-av{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff}
+.member-check{position:absolute;bottom:-2px;right:-2px;width:16px;height:16px;border-radius:50%;background:var(--acc);color:#fff;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;border:2px solid var(--bg)}
+.member-name{font-size:11.5px;font-weight:600;color:var(--fg);text-align:center;margin-bottom:2px}
+.member-tasks-count{font-size:10.5px;color:var(--mu)}
+.person-detail-card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:20px 22px 22px;box-shadow:0 2px 12px rgba(0,0,0,.04)}
+.person-detail-top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:18px}
+.person-detail-left{display:flex;align-items:center;gap:14px;flex:1;min-width:0}
+.person-lg-av{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:700;color:#fff;flex-shrink:0}
+.person-detail-name{font-size:18px;font-weight:700;color:var(--fg);margin-bottom:3px}
+.person-status{display:flex;align-items:center;gap:5px;font-size:12px;color:#3FBB68;font-weight:500;margin-bottom:2px}
+.person-status-dot{width:6px;height:6px;border-radius:50%;background:#3FBB68}
+.person-status.over{color:var(--red)}.person-status.over .person-status-dot{background:var(--red)}
+.person-detail-role{font-size:12px;color:var(--mu)}
+.assign-btn{background:none;border:1.5px solid var(--bd);border-radius:8px;font:12px 'Inter',sans-serif;color:var(--fg2);padding:7px 14px;cursor:pointer;white-space:nowrap;transition:all .12s;flex-shrink:0}
+.assign-btn:hover{border-color:var(--acc);color:var(--acc)}
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}
+.kpi-box{background:var(--card2);border:1px solid var(--bd);border-radius:10px;padding:14px 16px}
+.kpi-value{font-size:26px;font-weight:700;color:var(--fg);line-height:1;margin-bottom:4px;font-variant-numeric:tabular-nums}
+.kpi-value.red{color:var(--red)}
+.kpi-label{font-size:12px;font-weight:500;color:var(--fg2);margin-bottom:1px}
+.kpi-sub{font-size:11px;color:var(--mu)}
+.workload-section{margin-bottom:18px}
+.workload-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px}
+.workload-title{font-size:13px;font-weight:600;color:var(--fg)}
+.workload-legend{display:flex;gap:12px}
+.legend-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--mu)}
+.legend-dot{width:8px;height:8px;border-radius:2px}
+.workload-bar-track{height:10px;background:var(--card2);border:1px solid var(--bd);border-radius:5px;overflow:hidden;display:flex}
+.workload-bar-seg{height:100%;transition:width .6s cubic-bezier(.16,1,.3,1)}
+.tasks-section-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.tasks-title{font-size:13px;font-weight:600;color:var(--fg)}
+.tasks-sort{font-size:11.5px;color:var(--mu)}
+.task-table{width:100%;border-collapse:collapse}
+.task-table th{text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--dm);padding:0 10px 8px;border-bottom:1px solid var(--bd)}
+.task-table th:first-child{padding-left:0}
+.task-table td{padding:10px 10px;border-bottom:1px solid var(--bd);vertical-align:middle}
+.task-table td:first-child{padding-left:0}
+.task-table tr:last-child td{border-bottom:none}
+.task-row-name{font-size:12.5px;font-weight:600;color:var(--fg);margin-bottom:2px}
+.task-row-sub{font-size:11px;color:var(--mu);display:flex;align-items:center;gap:5px}
+.task-brand-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.stage-cell{display:flex;align-items:center;gap:6px;white-space:nowrap}
+.stage-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.stage-label{font-size:12px;color:var(--fg2)}
+.due-date{font-size:12px;color:var(--fg2);font-variant-numeric:tabular-nums}
+.due-overdue{font-size:10.5px;color:var(--red);font-weight:500;margin-top:1px}
+.effort-cell{font-size:12.5px;font-weight:600;color:var(--fg2)}
+.link-cell a{text-decoration:none;color:var(--dm);font-size:14px;transition:color .12s}
+.link-cell a:hover{color:var(--acc)}
+.tasks-show-more{text-align:center;padding-top:12px;font-size:12px;color:var(--acc);cursor:pointer;font-weight:500}
+.tasks-show-more:hover{text-decoration:underline}
 
-/* ─ CLIENTS ─ */
-#vc{flex:1;overflow-y:auto;padding:16px}
-.cl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(278px,1fr));gap:12px}
-.cl-card{background:var(--sf);border:1px solid var(--bd);border-radius:14px;padding:16px;transition:transform .15s,box-shadow .15s;cursor:default}
-.cl-card:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,0,0,.4)}
+/* ── CLIENTS ── */
+.cl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.cl-card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:16px;transition:transform .15s,box-shadow .15s;cursor:default}
+.cl-card:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,0,0,.06)}
 .cl-head{display:flex;align-items:center;gap:12px;margin-bottom:14px}
-.cl-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Inter Tight',sans-serif;font-size:14px;font-weight:800;color:#fff;flex-shrink:0}
-.cl-code{font-family:'Inter Tight',sans-serif;font-size:14px;font-weight:800}
+.cl-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.cl-code{font-size:14px;font-weight:800}
 .cl-full{font-size:11px;color:var(--mu);margin-top:1px}
-.cl-sp{font-size:15px;margin-top:2px}
 .cl-ring-wrap{margin-left:auto;position:relative}
 .cl-ring-wrap .ring-label{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column}
-.ring-pct{font-family:'Inter Tight',sans-serif;font-size:13px;font-weight:800;line-height:1}
+.ring-pct{font-size:13px;font-weight:800;line-height:1}
 .ring-sublabel{font-size:8px;color:var(--mu);text-transform:uppercase;letter-spacing:.06em;margin-top:1px}
-.cl-grade{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;font-family:'Inter Tight',sans-serif;font-size:11px;font-weight:800;flex-shrink:0}
+.cl-grade{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;font-size:11px;font-weight:800;flex-shrink:0}
 .cl-stats{display:flex;gap:0;border-top:1px solid var(--bd);padding-top:12px;margin-top:4px}
 .cl-stat{flex:1;text-align:center}
-.cl-stat-v{font-family:'Inter Tight',sans-serif;font-size:22px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1}
+.cl-stat-v{font-size:22px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1}
 .cl-stat-l{font-size:9.5px;color:var(--mu);text-transform:uppercase;letter-spacing:.06em;margin-top:3px}
 .cl-stat+.cl-stat{border-left:1px solid var(--bd)}
-.cl-bar{height:3px;background:var(--sf3);border-radius:2px;margin:10px 0;overflow:hidden}
+.cl-bar{height:3px;background:var(--card2);border-radius:2px;margin:10px 0;overflow:hidden}
 .cl-bar-fill{height:100%;border-radius:2px;transition:width .8s cubic-bezier(.16,1,.3,1)}
 
-/* ─ FIGMA PANEL ─ */
-#vf{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:8px}
-.fig-note{font-size:11px;color:var(--mu);background:rgba(59,59,245,.06);border:1px solid rgba(59,59,245,.18);border-radius:8px;padding:9px 13px;line-height:1.6}
+/* ── FIGMA ── */
+.fig-note{font-size:11.5px;color:var(--mu);background:var(--acc-bg);border:1px solid rgba(59,59,245,.15);border-radius:10px;padding:10px 14px;line-height:1.6}
 .fig-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:10px}
-.fig-card{background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px;transition:transform .14s}
-.fig-card:hover{transform:translateY(-1px)}
+.fig-card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px;transition:transform .14s,box-shadow .14s}
+.fig-card:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.06)}
 .fig-card-head{display:flex;align-items:center;gap:10px}
-.fig-brand-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Inter Tight',sans-serif;font-size:13px;font-weight:800;color:#fff;flex-shrink:0}
-.fig-brand-name{font-family:'Inter Tight',sans-serif;font-size:13px;font-weight:700}
-.fig-brand-sub{font-size:10px;color:var(--mu)}
-.fig-link{display:flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;color:var(--acc-l);text-decoration:none;background:rgba(59,59,245,.08);border:1px solid rgba(59,59,245,.2);border-radius:7px;padding:7px 11px;transition:background .12s}
-.fig-link:hover{background:rgba(59,59,245,.16)}
+.fig-brand-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.fig-brand-name{font-size:13px;font-weight:700}
+.fig-brand-sub{font-size:10.5px;color:var(--mu)}
+.fig-link{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--acc);text-decoration:none;background:var(--acc-bg);border:1px solid rgba(59,59,245,.18);border-radius:7px;padding:7px 11px;transition:background .12s}
+.fig-link:hover{background:rgba(59,59,245,.12)}
 .fig-status{display:flex;align-items:center;gap:7px;font-size:11px;padding-top:7px;border-top:1px solid var(--bd)}
 .fig-status-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
-.fig-last{font-size:9.5px;color:var(--dm);margin-left:auto;white-space:nowrap}
-.skill-callout{background:rgba(0,215,185,.06);border:1px solid rgba(0,215,185,.2);border-radius:12px;padding:14px 16px;display:flex;align-items:flex-start;gap:12px}
-.skill-callout h3{font-family:'Inter Tight',sans-serif;font-size:14px;font-weight:700;color:var(--teal);margin-bottom:4px}
-.skill-callout p{font-size:11.5px;color:var(--mu);line-height:1.55}
-.skill-callout code{font-size:11px;background:var(--sf2);border-radius:4px;padding:1px 5px;color:var(--fg)}
+.fig-last{font-size:9.5px;color:var(--dm);margin-left:auto}
+.skill-callout{background:var(--acc-bg);border:1px solid rgba(59,59,245,.15);border-radius:12px;padding:14px 16px;display:flex;align-items:flex-start;gap:12px}
+.skill-callout h3{font-size:14px;font-weight:700;color:var(--acc);margin-bottom:4px}
+.skill-callout p{font-size:12px;color:var(--mu);line-height:1.55}
+.skill-callout code{font-size:11px;background:var(--card2);border:1px solid var(--bd);border-radius:4px;padding:1px 5px;color:var(--fg)}
 
-/* ─ SATISFACTION PANEL ─ */
-#vs{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:8px}
-.sat-hero{background:linear-gradient(135deg,rgba(0,0,160,.2) 0%,rgba(0,215,185,.1) 100%);border:1px solid var(--bd);border-radius:16px;padding:20px;display:flex;align-items:center;gap:20px}
+/* ── SATISFACTION ── */
+.sat-feed-note{font-size:11.5px;color:var(--mu);background:var(--acc-bg);border:1px solid rgba(59,59,245,.14);border-radius:8px;padding:9px 13px;line-height:1.6}
+.sat-hero{background:linear-gradient(135deg,rgba(59,59,245,.05),rgba(63,187,104,.03));border:1px solid var(--bd);border-radius:16px;padding:20px;display:flex;align-items:center;gap:20px}
 .sat-score-ring{position:relative;flex-shrink:0}
 .sat-score-label{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.sat-score-n{font-family:'Inter Tight',sans-serif;font-size:22px;font-weight:800;line-height:1}
+.sat-score-n{font-size:22px;font-weight:800;line-height:1}
 .sat-score-sub{font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--mu);margin-top:2px}
 .sat-hero-info{flex:1}
-.sat-hero-title{font-family:'Inter Tight',sans-serif;font-size:18px;font-weight:800;margin-bottom:4px}
+.sat-hero-title{font-size:18px;font-weight:700;margin-bottom:4px;color:var(--fg)}
 .sat-hero-sub{font-size:11.5px;color:var(--mu);line-height:1.5;margin-bottom:12px}
 .sat-kpi-row{display:flex;gap:16px;flex-wrap:wrap}
 .sat-kpi{text-align:center}
-.sat-kpi-v{font-family:'Inter Tight',sans-serif;font-size:20px;font-weight:800;line-height:1}
+.sat-kpi-v{font-size:20px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
 .sat-kpi-l{font-size:9px;color:var(--mu);text-transform:uppercase;letter-spacing:.06em;margin-top:2px}
-
 .sat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
-.sat-card{background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:15px}
-.sat-card-title{font-family:'Inter Tight',sans-serif;font-size:13px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px;color:var(--fg2)}
-.sat-card-title .sat-ico{font-size:16px}
+.sat-card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:15px}
+.sat-card-title{font-size:13px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px;color:var(--fg2)}
 .process-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--bd)}
 .process-row:last-child{border-bottom:none}
 .process-name{font-size:11.5px;font-weight:600;flex:1}
-.process-bar-wrap{flex:2;height:6px;background:var(--sf3);border-radius:3px;overflow:hidden}
+.process-bar-wrap{flex:2;height:5px;background:var(--card2);border-radius:3px;overflow:hidden}
 .process-bar-fill{height:100%;border-radius:3px;transition:width .7s cubic-bezier(.16,1,.3,1)}
-.process-pct{font-family:'Inter Tight',sans-serif;font-size:12px;font-weight:700;width:36px;text-align:right;font-variant-numeric:tabular-nums}
+.process-pct{font-size:12px;font-weight:700;width:36px;text-align:right;font-variant-numeric:tabular-nums}
 .process-badge{font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;white-space:nowrap}
 .sat-comment{display:flex;gap:8px;padding:8px 0;border-bottom:1px solid var(--bd);align-items:flex-start}
 .sat-comment:last-child{border-bottom:none}
 .sat-comment-sent{width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:1px}
-.sat-comment-sent.pos{background:rgba(0,215,185,.15);color:var(--teal)}
-.sat-comment-sent.neg{background:rgba(232,50,74,.12);color:var(--red)}
-.sat-comment-sent.neu{background:rgba(74,88,128,.2);color:var(--mu)}
-.sat-comment-text{font-size:11px;color:var(--mu);line-height:1.5;flex:1}
-.sat-comment-brand{font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;margin-top:2px;display:inline-block}
+.sat-comment-sent.pos{background:rgba(63,187,104,.12);color:#3FBB68}
+.sat-comment-sent.neg{background:rgba(232,50,74,.1);color:var(--red)}
+.sat-comment-sent.neu{background:var(--card2);color:var(--mu)}
+.sat-comment-text{font-size:11.5px;color:var(--mu);line-height:1.5;flex:1}
+.sat-comment-brand{font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;display:inline-block;margin-bottom:2px}
 .sat-comment-meta{font-size:9px;color:var(--dm);margin-top:1px}
-
 .brand-sat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px}
-.brand-sat-card{background:var(--sf);border:1px solid var(--bd);border-radius:10px;padding:12px;display:flex;align-items:center;gap:10px}
-.brand-sat-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.brand-sat-card{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:12px;display:flex;align-items:center;gap:10px}
+.brand-sat-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
 .brand-sat-info{flex:1;min-width:0}
-.brand-sat-name{font-family:'Inter Tight',sans-serif;font-size:12px;font-weight:700}
-.brand-sat-score{font-family:'Inter Tight',sans-serif;font-size:18px;font-weight:800;line-height:1}
+.brand-sat-name{font-size:12px;font-weight:700}
+.brand-sat-score{font-size:18px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
 .brand-sat-sub{font-size:9px;color:var(--mu);margin-top:1px}
-.brand-sat-bar{height:3px;background:var(--sf3);border-radius:2px;margin-top:6px;overflow:hidden}
+.brand-sat-bar{height:3px;background:var(--card2);border-radius:2px;margin-top:6px;overflow:hidden}
 .brand-sat-fill{height:100%;border-radius:2px;transition:width .8s cubic-bezier(.16,1,.3,1)}
-.sat-feed-note{font-size:10.5px;color:var(--mu);background:rgba(0,215,185,.04);border:1px solid rgba(0,215,185,.14);border-radius:8px;padding:9px 13px;line-height:1.6}
 
-/* ─ ACCORDION SECTIONS ─ */
-.acc-sec{border:1px solid var(--bd);border-radius:10px;overflow:hidden;background:var(--sf);margin-bottom:0}
-.acc-hd{display:flex;align-items:center;gap:8px;padding:10px 14px;cursor:pointer;user-select:none;transition:background .12s}
-.acc-hd:hover{background:var(--sf2)}
-.acc-hd-title{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--mu);flex:1}
-.acc-hd-ico{font-size:14px;flex-shrink:0}
-.acc-chev{margin-left:4px;font-size:9px;color:var(--dm);transition:transform .22s cubic-bezier(.4,0,.2,1);display:inline-block;flex-shrink:0}
-.acc-sec.closed .acc-chev{transform:rotate(-90deg)}
-.acc-bd{overflow:hidden;transition:max-height .3s cubic-bezier(.4,0,.2,1),padding-bottom .3s;padding:2px 14px 14px}
-.acc-sec.closed .acc-bd{max-height:0!important;padding-bottom:0!important;padding-top:0!important}
-
-/* ─ ANIMATION & SHARED ─ */
-@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.card{animation:fadeUp .2s ease both}
-.cl-card{animation:fadeUp .25s ease both}
+/* ── SHARED ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.card{animation:fadeUp .18s ease both}
+.cl-card{animation:fadeUp .22s ease both}
 ::-webkit-scrollbar{width:4px;height:4px}
 ::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:var(--dm);border-radius:2px}
+::-webkit-scrollbar-thumb{background:var(--bd);border-radius:2px}
 </style>
 
-<!-- Mars M logo paths inlined — avoids symbol/use rendering artifacts -->
-<!-- Left half: M0 0→7 10→14 0→14 18 inner-notch→0 18 (cobalt) -->
-<!-- Right half: M14 0→21 10→28 0→28 18 inner-notch→14 18 (teal) -->
-
 <div class="app">
-
-  <!-- TOP BAR -->
-  <header class="topbar">
-    <div class="lockup">
-      <div>
-        <span class="brand-name">MARS WITHIN</span>
-        <span class="brand-sub"><span class="pulse"></span>effem.com · 7 brands</span>
-      </div>
-    </div>
-    <div class="chips" id="stat-chips"></div>
-    <div class="topbar-right">
-      <button class="spotlight-btn" id="spotlight-btn" onclick="toggleSpotlight()" title="Spotlight: My Tasks">
-        <span class="spotlight-dot"></span> Spotlight
-      </button>
-      <div class="refresh-wrap">
-        <button class="refresh-btn" id="refresh-btn" onclick="doRefresh()"><span class="ri">↺</span> Refresh</button>
-        <div class="last-sync" id="last-sync">Never synced</div>
-      </div>
-      <div class="tabs">
-        <button class="tab on"  onclick="setView('vk',this)">Kanban</button>
-        <button class="tab"     onclick="setView('vb',this)">Bandwidth</button>
-        <button class="tab"     onclick="setView('vc',this)">Clients</button>
-        <button class="tab"     onclick="setView('vf',this)">Figma</button>
-        <button class="tab"     onclick="setView('vs',this)">Satisfaction</button>
-      </div>
-    </div>
-  </header>
-
   <!-- SIDEBAR -->
   <aside class="sidebar">
-    <div>
-      <div class="g-lbl">Brands</div>
-      <div class="pill-list" id="brand-nav"></div>
+    <div class="sb-logo">
+      <div class="sb-logo-sq">m</div>
+      <div>
+        <div class="sb-logo-text">MARS WITHIN</div>
+        <div class="sb-logo-sub">Creative tracker</div>
+      </div>
     </div>
-    <div>
-      <div class="g-lbl">Type</div>
-      <div class="pill-list" id="type-nav"></div>
+    <div class="sb-workspace">
+      <div class="sb-ws-label">WORKSPACE</div>
+      <div class="sb-ws-name">effem.com</div>
     </div>
-    <div>
-      <div class="g-lbl">Team</div>
-      <div id="team-list"></div>
+    <nav class="sb-nav">
+      <button class="nav-item on" onclick="setView('vk',this)" data-view="vk"><span class="nav-icon">⊞</span>Kanban</button>
+      <button class="nav-item" onclick="setView('vb',this)" data-view="vb"><span class="nav-icon">▤</span>Bandwidth</button>
+      <button class="nav-item" onclick="setView('vc',this)" data-view="vc"><span class="nav-icon">◉</span>Clients</button>
+      <button class="nav-item" onclick="setView('vf',this)" data-view="vf"><span class="nav-icon">✦</span>Figma</button>
+      <button class="nav-item" onclick="setView('vs',this)" data-view="vs"><span class="nav-icon">☺</span>Satisfaction</button>
+    </nav>
+    <div class="sb-brands">
+      <div class="sb-sec-hd"><span class="sb-sec-lbl">Brands</span></div>
+      <div id="brand-nav"></div>
     </div>
-    <div>
-      <div class="g-lbl">Skill</div>
-      <div class="skill-pill" onclick="setView('vf',document.querySelectorAll('.tab')[3])" role="button">
-        <span class="sk-ico">✏️</span>
-        <div><div class="sk-name">figma-note-updated</div><div class="sk-sub">Auto-comment when edits addressed</div></div>
+    <div class="sb-footer">
+      <div class="sb-help">? Help &amp; resources</div>
+      <div class="sb-user">
+        <div class="sb-user-av" style="background:#AB7DFF">LM</div>
+        <div>
+          <div class="sb-user-name">Lucia Mora</div>
+          <div class="sb-user-role">Senior Lifecycle Designer</div>
+        </div>
       </div>
     </div>
   </aside>
 
   <!-- MAIN -->
   <main class="main">
+    <!-- Breadcrumb bar -->
+    <div class="breadbar">
+      <div class="breadcrumb">
+        <span>Workspace</span>
+        <span class="breadcrumb-sep">›</span>
+        <span class="breadcrumb-curr" id="breadcrumb-curr">Kanban</span>
+      </div>
+      <div class="stats-row" id="stat-chips"></div>
+      <div class="topbar-actions">
+        <button class="action-btn" id="spotlight-btn" onclick="toggleSpotlight()"><span>✦</span> Spotlight</button>
+        <div class="refresh-wrap">
+          <button class="action-btn refresh-btn" id="refresh-btn" onclick="doRefresh()"><span class="ri">↺</span> Refresh</button>
+          <div class="last-sync" id="last-sync">Never synced</div>
+        </div>
+        <div class="search-box">🔍 Search<span class="search-kbd">⌘K</span></div>
+        <button class="bell-btn">🔔</button>
+      </div>
+    </div>
 
     <!-- KANBAN -->
     <div id="vk">
@@ -396,66 +370,27 @@ body{
     </div>
 
     <!-- BANDWIDTH -->
-    <div id="vb" hidden>
-      <div class="acc-sec" id="as-bw1">
-        <div class="acc-hd" onclick="toggleSec('as-bw1')"><span class="acc-hd-ico">👥</span><span class="acc-hd-title">Workload by person</span><span class="acc-chev">▾</span></div>
-        <div class="acc-bd"><div class="bw-grid" id="bw-people"></div></div>
-      </div>
-      <div class="acc-sec" id="as-bw2">
-        <div class="acc-hd" onclick="toggleSec('as-bw2')"><span class="acc-hd-ico">📦</span><span class="acc-hd-title">Tasks by brand</span><span class="acc-chev">▾</span></div>
-        <div class="acc-bd"><div class="bw-grid" id="bw-brands"></div></div>
-      </div>
-      <div class="acc-sec" id="as-bw3">
-        <div class="acc-hd" onclick="toggleSec('as-bw3')"><span class="acc-hd-ico">🏆</span><span class="acc-hd-title">Wins &amp; flags</span><span class="acc-chev">▾</span></div>
-        <div class="acc-bd"><div class="notes-grid" id="notes-grid"></div></div>
-      </div>
-    </div>
+    <div id="vb" hidden></div>
 
     <!-- CLIENTS -->
     <div id="vc" hidden><div class="cl-grid" id="cl-grid"></div></div>
 
     <!-- FIGMA -->
     <div id="vf" hidden>
-      <div class="acc-sec" id="as-vf-skill">
-        <div class="acc-hd" onclick="toggleSec('as-vf-skill')"><span class="acc-hd-ico">✏️</span><span class="acc-hd-title">figma-note-updated skill</span><span class="acc-chev">▾</span></div>
-        <div class="acc-bd">
-          <div class="skill-callout" style="margin:0">
-            <span style="font-size:28px;flex-shrink:0;margin-top:2px">✏️</span>
-            <div>
-              <h3>figma-note-updated</h3>
-              <p>Once all edits are addressed, trigger this skill to auto-post a completion comment. In Claude Code, type <code>/figma-note-updated</code> or say <em>"mark this Figma frame as edit-complete."</em> Created 2026-10-15.</p>
-            </div>
-          </div>
-        </div>
+      <div class="skill-callout">
+        <span style="font-size:24px;flex-shrink:0;margin-top:2px">✏️</span>
+        <div><h3>figma-note-updated</h3><p>Once all edits are addressed, trigger this skill to auto-post a completion comment. In Claude Code, type <code>/figma-note-updated</code> or say <em>"mark this Figma frame as edit-complete."</em> Created 2026-10-15.</p></div>
       </div>
-      <div class="acc-sec" id="as-vf-note">
-        <div class="acc-hd" onclick="toggleSec('as-vf-note')"><span class="acc-hd-ico">⚠</span><span class="acc-hd-title">Real-time detection</span><span class="acc-chev">▾</span></div>
-        <div class="acc-bd"><div class="fig-note" style="margin:0">⚠ Real-time Figma change detection requires the GitHub Actions pipeline. Until then, open each brand file manually — the tracker logs your last visit per brand.</div></div>
-      </div>
-      <div class="acc-sec" id="as-vf-grid">
-        <div class="acc-hd" onclick="toggleSec('as-vf-grid')"><span class="acc-hd-ico">🔗</span><span class="acc-hd-title">Brand Figma files</span><span class="acc-chev">▾</span></div>
-        <div class="acc-bd"><div class="fig-grid" id="fig-grid"></div></div>
-      </div>
+      <div class="fig-note">⚠ Real-time Figma change detection requires the GitHub Actions pipeline. Until then, open each brand file manually — the tracker logs your last visit per brand.</div>
+      <div class="fig-grid" id="fig-grid"></div>
     </div>
 
     <!-- SATISFACTION -->
     <div id="vs" hidden>
-      <div class="acc-sec" id="as-vs-note">
-        <div class="acc-hd" onclick="toggleSec('as-vs-note')"><span class="acc-hd-ico">📊</span><span class="acc-hd-title">Data sources</span><span class="acc-chev">▾</span></div>
-        <div class="acc-bd"><div class="sat-feed-note" style="margin:0">📊 Metrics are calculated from Asana task data — delivery rates, comment counts, and review cycles update automatically when the GitHub Actions sync runs. Comment sentiment feed ingests positive and negative notes from all task comments across Copy, Design, and Development processes.</div></div>
-      </div>
-      <div class="acc-sec" id="as-vs-hero">
-        <div class="acc-hd" onclick="toggleSec('as-vs-hero')"><span class="acc-hd-ico">🎯</span><span class="acc-hd-title">Composite score</span><span class="acc-chev">▾</span></div>
-        <div class="acc-bd"><div class="sat-hero" id="sat-hero"></div></div>
-      </div>
-      <div class="acc-sec" id="as-vs-grid">
-        <div class="acc-hd" onclick="toggleSec('as-vs-grid')"><span class="acc-hd-ico">⚙️</span><span class="acc-hd-title">Process &amp; approval</span><span class="acc-chev">▾</span></div>
-        <div class="acc-bd"><div class="sat-grid" id="sat-grid"></div></div>
-      </div>
-      <div class="acc-sec" id="as-vs-brands">
-        <div class="acc-hd" onclick="toggleSec('as-vs-brands')"><span class="acc-hd-ico">🐾</span><span class="acc-hd-title">Brand satisfaction</span><span class="acc-chev">▾</span></div>
-        <div class="acc-bd"><div class="brand-sat-grid" id="brand-sat-grid"></div></div>
-      </div>
+      <div class="sat-feed-note">📊 Metrics are calculated from Asana task data — delivery rates, comment counts, and review cycles update automatically when the GitHub Actions sync runs.</div>
+      <div class="sat-hero" id="sat-hero"></div>
+      <div class="sat-grid" id="sat-grid"></div>
+      <div class="brand-sat-grid" id="brand-sat-grid"></div>
     </div>
   </main>
 </div>
@@ -465,46 +400,47 @@ body{
 const TODAY = new Date('2026-10-16');
 
 const BRANDS = {
-  CSR:{name:'Caesar',      color:'#4F85F8',bg:'#0D1835',figma:'https://www.figma.com/design/7829p2Vc0tc1dPbURvDxKg/Cesar',    species:'dog'},
-  GRN:{name:'Greenies',    color:'#3FBB68',bg:'#081E10',figma:'https://www.figma.com/design/7rv9vvbCppBRbOjqv42NQi/Greenies', species:'both'},
-  IAM:{name:'IAMS',        color:'#FF7A52',bg:'#200D08',figma:'https://www.figma.com/design/j5Bwm3Fh92lSMwzNCEpENl/IAMS',    species:'both'},
-  PED:{name:'Pedigree',    color:'#E85560',bg:'#1E080C',figma:'https://www.figma.com/design/83jRSwFotHEfLxe2hW8XIi/Pedigree', species:'dog'},
-  NTR:{name:'Nutro',       color:'#C49B6C',bg:'#1A1208',figma:'https://www.figma.com/design/ldJ9lfOZmuNPXGDIlOgPFd/Nutro',   species:'both'},
-  SHB:{name:'Sheba',       color:'#AB7DFF',bg:'#130B28',figma:'https://www.figma.com/design/XrojRNZEyKpTcPHus19tpo/Sheba',   species:'cat'},
-  TEM:{name:'Temptations', color:'#F5A823',bg:'#1E1408',figma:'https://www.figma.com/design/Qmwptrww20wGCOVj854bEU/Temptations?node-id=2316-2', species:'cat'},
+  CSR:{name:'Caesar',      color:'#4F85F8',figma:'https://www.figma.com/design/7829p2Vc0tc1dPbURvDxKg/Cesar',    species:'dog'},
+  GRN:{name:'Greenies',    color:'#3FBB68',figma:'https://www.figma.com/design/7rv9vvbCppBRbOjqv42NQi/Greenies', species:'both'},
+  IAM:{name:'IAMS',        color:'#FF7A52',figma:'https://www.figma.com/design/j5Bwm3Fh92lSMwzNCEpENl/IAMS',    species:'both'},
+  PED:{name:'Pedigree',    color:'#E85560',figma:'https://www.figma.com/design/83jRSwFotHEfLxe2hW8XIi/Pedigree', species:'dog'},
+  NTR:{name:'Nutro',       color:'#C49B6C',figma:'https://www.figma.com/design/ldJ9lfOZmuNPXGDIlOgPFd/Nutro',   species:'both'},
+  SHB:{name:'Sheba',       color:'#AB7DFF',figma:'https://www.figma.com/design/XrojRNZEyKpTcPHus19tpo/Sheba',   species:'cat'},
+  TEM:{name:'Temptations', color:'#F5A823',figma:'https://www.figma.com/design/Qmwptrww20wGCOVj854bEU/Temptations?node-id=2316-2', species:'cat'},
 };
 
 const STAGES = [
-  {id:'with-copy', label:'With Copy',        color:'#4F85F8'},
-  {id:'design',    label:'Design',            color:'#AB7DFF'},
-  {id:'waiting',   label:'Waiting for Copy',  color:'#D4962A'},
-  {id:'inprocess', label:'In Process',        color:'#3FBB68'},
-  {id:'final',     label:'Final Steps',       color:'#FF7A52'},
-  {id:'delivered', label:'Delivered',         color:'#00D7B9'},
+  {id:'with-copy', label:'With Copy',       color:'#4F85F8'},
+  {id:'design',    label:'Design',           color:'#AB7DFF'},
+  {id:'waiting',   label:'Waiting for Copy', color:'#D4962A'},
+  {id:'inprocess', label:'In Process',       color:'#3FBB68'},
+  {id:'final',     label:'Final Steps',      color:'#FF7A52'},
+  {id:'delivered', label:'Delivered',        color:'#00A890'},
 ];
+const STAGE_MAP = {};
+STAGES.forEach(s=>STAGE_MAP[s.id]=s);
 
 const PEOPLE = {
   LM:{name:'Lucia Mora',      initials:'LM',title:'Senior Lifecycle Designer',role:'designer', color:'#AB7DFF'},
   KM:{name:'Karan Matlani',   initials:'KM',title:'Lifecycle Specialist',     role:'specialist',color:'#4F85F8'},
   RI:{name:'Rina Anzarut',    initials:'RI',title:'Email Account Manager',    role:'account',  color:'#FF7A52'},
   NI:{name:'Nico Yepes',      initials:'NI',title:'Email Specialist',         role:'specialist',color:'#3FBB68'},
-  CA:{name:'Carla Donahue',   initials:'CA',title:'Sr. Director, Lifecycle',  role:'director', color:'#00D7B9'},
+  CA:{name:'Carla Donahue',   initials:'CA',title:'Sr. Director, Lifecycle',  role:'director', color:'#00A890'},
   MA:{name:'Manuel Rodriguez',initials:'MA',title:'Email Coder',              role:'coder',    color:'#F5A623'},
   LE:{name:'Leo Diaz',        initials:'LE',title:'Email Coder',              role:'coder',    color:'#E85560'},
   AN:{name:'Andrea',          initials:'AN',title:'Brand Reviewer',           role:'client',   color:'#C49B6C'},
   EM:{name:'Emily',           initials:'EM',title:'Brand Contact',            role:'client',   color:'#4F85F8'},
   CY:{name:'Carly',           initials:'CY',title:'Operations',               role:'ops',      color:'#D4962A'},
 };
-const SPOTLIGHT_USER = 'LM'; // Lucia is the only designer
+const SPOTLIGHT_USER = 'LM';
 
-function sp(task) {
-  const n = task.name;
-  if (n.includes('_Cat')||n.includes('Cat_')) return 'cat';
-  if (n.includes('_Dog')||n.includes('Dog_')) return 'dog';
+const SP = {cat:'🐱',dog:'🐶',both:'🐈🐕'};
+function sp(task){
+  const n=task.name;
+  if(n.includes('_Cat')||n.includes('Cat_'))return'cat';
+  if(n.includes('_Dog')||n.includes('Dog_'))return'dog';
   return BRANDS[task.brand].species;
 }
-// 🐾 replaced with 🐈🐕 for multi-species brands (GRN, NTR, IAM)
-const SP = {cat:'🐱',dog:'🐶',both:'🐈🐕'};
 
 const TASKS = [
   {id:1, name:'SHB_Birthday_T2',              brand:'SHB',stage:'with-copy', type:'Birthday',  who:'LM',due:'2026-10-20',cmt:2},
@@ -538,7 +474,6 @@ const TASKS = [
   {id:29,name:'2026_TEM_Enrichment_T2a-b',    brand:'TEM',stage:'delivered', type:'Enrichment',who:'LM',due:'2026-10-12',int:1,ext:0},
 ];
 
-// Simulated comment sentiment feed — in production this comes from Asana task comments via sync script
 const COMMENT_FEED = [
   {brand:'CSR',text:'Design looks great — approved! Clean, on-brand.',sent:'pos',who:'Brand Team',date:'Oct 15'},
   {brand:'IAM',text:'T1 Cat needs revision on the color contrast for accessibility.',sent:'neg',who:'Reviewer',date:'Oct 14'},
@@ -550,42 +485,8 @@ const COMMENT_FEED = [
   {brand:'IAM',text:'Dog T1 + T2a-b both cleared — smooth process this cycle.',sent:'pos',who:'Brand Team',date:'Oct 9'},
 ];
 
-// ─── ACCORDION STATE ──────────────────────────────────────────────────────
-let collapsedSecs=new Set();
-try{collapsedSecs=new Set(JSON.parse(localStorage.getItem('mars-collapsed-secs')||'[]'));}catch(e){}
-
-function toggleSec(id){
-  const sec=document.getElementById(id);
-  if(!sec) return;
-  const body=sec.querySelector('.acc-bd');
-  const isOpen=!sec.classList.contains('closed');
-  if(isOpen){
-    body.style.maxHeight=body.scrollHeight+'px';
-    requestAnimationFrame(()=>requestAnimationFrame(()=>{body.style.maxHeight='0';body.style.paddingBottom='0';}));
-    sec.classList.add('closed');
-    collapsedSecs.add(id);
-  } else {
-    sec.classList.remove('closed');
-    body.style.maxHeight=body.scrollHeight+'px';
-    body.style.paddingBottom='';
-    body.addEventListener('transitionend',()=>{body.style.maxHeight='';},{once:true});
-    collapsedSecs.delete(id);
-  }
-  try{localStorage.setItem('mars-collapsed-secs',JSON.stringify([...collapsedSecs]));}catch(e){}
-}
-
-function initAccordions(){
-  document.querySelectorAll('.acc-sec[id]').forEach(sec=>{
-    if(collapsedSecs.has(sec.id)){
-      sec.classList.add('closed');
-      const body=sec.querySelector('.acc-bd');
-      if(body) body.style.maxHeight='0';
-    }
-  });
-}
-
 // ─── STATE ────────────────────────────────────────────────────────────────
-let activeBrand='ALL', activeType='ALL', spotlightOn=false;
+let activeBrand='ALL', activeType='ALL', spotlightOn=false, selectedMember='LM';
 let hiddenCols=new Set();
 try{hiddenCols=new Set(JSON.parse(localStorage.getItem('mars-hidden-cols')||'[]'));}catch(e){}
 const filtered=()=>TASKS.filter(t=>
@@ -593,55 +494,41 @@ const filtered=()=>TASKS.filter(t=>
   (activeType==='ALL'||t.type===activeType)&&
   (!spotlightOn||t.who===SPOTLIGHT_USER)
 );
-function toggleSpotlight(){
-  spotlightOn=!spotlightOn;
-  const btn=document.getElementById('spotlight-btn');
-  btn.classList.toggle('spotlight-on',spotlightOn);
-  btn.title=spotlightOn?'Exit Spotlight':'Spotlight: My Tasks';
-  render();
-}
-function toggleCol(stageId){
-  hiddenCols.has(stageId)?hiddenCols.delete(stageId):hiddenCols.add(stageId);
-  try{localStorage.setItem('mars-hidden-cols',JSON.stringify([...hiddenCols]));}catch(e){}
-  renderKanban();
-}
 const isOv=(d)=>d&&new Date(d)<TODAY;
 const fmtD=(d)=>d?new Date(d).toLocaleDateString('en-US',{month:'short',day:'numeric'}):'';
 const fmtDT=(ts)=>{if(!ts)return'—';const d=new Date(ts);return d.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' · '+d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});};
 const el=(tag,cls,html='')=>{const e=document.createElement(tag);if(cls)e.className=cls;if(html)e.innerHTML=html;return e;};
 
-// Stage category helpers
 const COPY_STAGES   = ['with-copy','waiting'];
 const DESIGN_STAGES = ['design'];
 const DEV_STAGES    = ['inprocess','final'];
+const EFFORT_H      = {Enrichment:5,Birthday:4,General:3,Holiday:3};
 
-// ─── PROGRESS RING SVG ───────────────────────────────────────────────────
-function ring(pct, color, size=60) {
-  const r = size/2 - 6, c = 2*Math.PI*r;
-  const off = c*(1-Math.max(0,Math.min(100,pct))/100);
+// ─── RING SVG ─────────────────────────────────────────────────────────────
+function ring(pct,color,size=60){
+  const r=size/2-6,c=2*Math.PI*r;
+  const off=c*(1-Math.max(0,Math.min(100,pct))/100);
   return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" style="display:block">
-    <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="5"/>
+    <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="var(--card2)" stroke-width="5"/>
     <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${color}" stroke-width="5"
       stroke-dasharray="${c.toFixed(1)}" stroke-dashoffset="${c.toFixed(1)}"
       stroke-linecap="round" transform="rotate(-90 ${size/2} ${size/2})"
       class="ring-anim" data-target="${off.toFixed(1)}"/>
   </svg>`;
 }
-
-function animateRings() {
-  document.querySelectorAll('.ring-anim').forEach(el => {
-    const target = parseFloat(el.dataset.target);
-    el.style.transition = 'stroke-dashoffset 1s cubic-bezier(.16,1,.3,1)';
-    requestAnimationFrame(() => requestAnimationFrame(() => el.style.strokeDashoffset = target));
+function animateRings(){
+  document.querySelectorAll('.ring-anim').forEach(el=>{
+    const t=parseFloat(el.dataset.target);
+    el.style.transition='stroke-dashoffset 1s cubic-bezier(.16,1,.3,1)';
+    requestAnimationFrame(()=>requestAnimationFrame(()=>el.style.strokeDashoffset=t));
   });
 }
-
-function gradeFromPct(pct) {
-  if (pct>=90) return {g:'A+',c:'#00D7B9',bg:'rgba(0,215,185,.15)'};
-  if (pct>=75) return {g:'A', c:'#3FBB68',bg:'rgba(63,187,104,.15)'};
-  if (pct>=60) return {g:'B', c:'#4F85F8',bg:'rgba(79,133,248,.15)'};
-  if (pct>=45) return {g:'C', c:'#F5A823',bg:'rgba(245,168,35,.15)'};
-  return           {g:'D', c:'#E85560',bg:'rgba(232,85,96,.15)'};
+function gradeFromPct(pct){
+  if(pct>=90)return{g:'A+',c:'#3FBB68',bg:'rgba(63,187,104,.12)'};
+  if(pct>=75)return{g:'A', c:'#4F85F8',bg:'rgba(79,133,248,.12)'};
+  if(pct>=60)return{g:'B', c:'var(--acc)',bg:'var(--acc-bg)'};
+  if(pct>=45)return{g:'C', c:'#F5A823',bg:'rgba(245,168,35,.12)'};
+  return          {g:'D', c:'var(--red)',bg:'rgba(232,50,74,.1)'};
 }
 
 // ─── REFRESH ─────────────────────────────────────────────────────────────
@@ -655,7 +542,7 @@ function doRefresh(){
   },900);
 }
 
-// ─── STATS BAR ───────────────────────────────────────────────────────────
+// ─── STATS ────────────────────────────────────────────────────────────────
 function renderStats(){
   const a=TASKS.filter(t=>t.stage!=='delivered').length;
   const o=TASKS.filter(t=>t.stage!=='delivered'&&isOv(t.due)).length;
@@ -663,44 +550,41 @@ function renderStats(){
   const d=TASKS.filter(t=>t.stage==='delivered').length;
   const pct=Math.round(d/TASKS.length*100);
   document.getElementById('stat-chips').innerHTML=`
-    <div class="chip acc"><div class="chip-inner"><span class="chip-n">${a}</span><span class="chip-l">Active</span></div></div>
-    <div class="chip danger"><div class="chip-inner"><span class="chip-n">${o}</span><span class="chip-l">Overdue</span></div></div>
-    <div class="chip warn"><div class="chip-inner"><span class="chip-n">${f}</span><span class="chip-l">Final Steps</span></div></div>
-    <div class="chip ok"><div class="chip-inner"><span class="chip-n">${pct}%</span><span class="chip-l">Delivered</span></div></div>`;
+    <div class="stat-chip"><span class="stat-n acc">${a}</span> active</div>
+    <div class="stat-chip"><span class="stat-n danger">${o}</span> overdue</div>
+    <div class="stat-chip"><span class="stat-n warn">${f}</span> final</div>
+    <div class="stat-chip"><span class="stat-n ok">${pct}%</span> delivered</div>`;
 }
 
-// ─── TODAY BANNER — overdue broken out by process ─────────────────────────
+// ─── TODAY BANNER ─────────────────────────────────────────────────────────
+let ovBannerClosed=false;
+try{ovBannerClosed=localStorage.getItem('mars-ov-banner')==='1';}catch(e){}
+
 function renderToday(){
   const banner=document.getElementById('today-banner');
   const active=TASKS.filter(t=>t.stage!=='delivered');
   const ovAll=active.filter(t=>isOv(t.due));
   if(!ovAll.length){banner.hidden=true;return;}
   banner.hidden=false;
-
-  const ovCopy   = ovAll.filter(t=>COPY_STAGES.includes(t.stage));
-  const ovDesign = ovAll.filter(t=>DESIGN_STAGES.includes(t.stage));
-  const ovDev    = ovAll.filter(t=>DEV_STAGES.includes(t.stage));
-
-  function groupHtml(items, cls, label) {
-    if(!items.length) return '';
-    const chips = items.map(t=>`<span class="urg-chip">⚠ ${t.name}</span>`).join('');
-    return `<div class="ov-group"><span class="ov-group-lbl ${cls}">${label} (${items.length})</span>${chips}</div>`;
+  const ovCopy=ovAll.filter(t=>COPY_STAGES.includes(t.stage));
+  const ovDesign=ovAll.filter(t=>DESIGN_STAGES.includes(t.stage));
+  const ovDev=ovAll.filter(t=>DEV_STAGES.includes(t.stage));
+  function gHtml(items,cls,lbl){
+    if(!items.length)return'';
+    return`<div class="ov-group"><span class="ov-group-lbl ${cls}">${lbl} (${items.length})</span>${items.map(t=>`<span class="urg-chip">⚠ ${t.name}</span>`).join('')}</div>`;
   }
-
-  const isClosedOv = collapsedSecs.has('ov-banner');
-  if(isClosedOv) banner.classList.add('ov-closed'); else banner.classList.remove('ov-closed');
-
-  const bodyHtml = groupHtml(ovCopy,'copy','Copy') + groupHtml(ovDesign,'design','Design') + groupHtml(ovDev,'dev','Dev');
-
+  if(ovBannerClosed)banner.classList.add('ov-closed');else banner.classList.remove('ov-closed');
   banner.innerHTML=`
     <div class="today-banner-hd" onclick="toggleOvBanner()">
       <span class="today-label">🔴 Overdue <span style="color:var(--dm);font-weight:400">(${ovAll.length})</span></span>
       <div style="flex:1;display:flex;gap:8px;overflow:hidden;align-items:center">
-        ${isClosedOv?`<span style="font-size:10px;color:var(--mu);font-weight:500">${ovCopy.length?`Copy: ${ovCopy.length} `:''} ${ovDesign.length?`Design: ${ovDesign.length} `:''} ${ovDev.length?`Dev: ${ovDev.length}`:''}</span>`:''}
+        ${ovBannerClosed?`<span style="font-size:10px;color:var(--mu)">${[ovCopy.length?`Copy: ${ovCopy.length}`:'',ovDesign.length?`Design: ${ovDesign.length}`:'',ovDev.length?`Dev: ${ovDev.length}`:''].filter(Boolean).join(' · ')}</span>`:''}
       </div>
       <span class="today-chev">▾</span>
     </div>
-    <div class="today-banner-body" ${isClosedOv?'style="max-height:0;padding-bottom:0"':''}>${bodyHtml}</div>`;
+    <div class="today-banner-body" ${ovBannerClosed?'style="max-height:0;padding-bottom:0"':''}>
+      ${gHtml(ovCopy,'copy','Copy')}${gHtml(ovDesign,'design','Design')}${gHtml(ovDev,'dev','Dev')}
+    </div>`;
 }
 function toggleOvBanner(){
   const banner=document.getElementById('today-banner');
@@ -709,16 +593,14 @@ function toggleOvBanner(){
   if(isOpen){
     body.style.maxHeight=body.scrollHeight+'px';
     requestAnimationFrame(()=>requestAnimationFrame(()=>{body.style.maxHeight='0';body.style.paddingBottom='0';}));
-    banner.classList.add('ov-closed');
-    collapsedSecs.add('ov-banner');
+    banner.classList.add('ov-closed');ovBannerClosed=true;
   } else {
     banner.classList.remove('ov-closed');
-    body.style.maxHeight=body.scrollHeight+'px';
-    body.style.paddingBottom='';
-    body.addEventListener('transitionend',()=>{body.style.maxHeight='';},{ once:true });
-    collapsedSecs.delete('ov-banner');
+    body.style.maxHeight=body.scrollHeight+'px';body.style.paddingBottom='';
+    body.addEventListener('transitionend',()=>{body.style.maxHeight='';},{once:true});
+    ovBannerClosed=false;
   }
-  try{localStorage.setItem('mars-collapsed-secs',JSON.stringify([...collapsedSecs]));}catch(e){}
+  try{localStorage.setItem('mars-ov-banner',ovBannerClosed?'1':'0');}catch(e){}
   setTimeout(renderToday,20);
 }
 
@@ -726,53 +608,39 @@ function toggleOvBanner(){
 function renderSidebar(){
   const bn=document.getElementById('brand-nav');bn.innerHTML='';
   const bc={};TASKS.forEach(t=>bc[t.brand]=(bc[t.brand]||0)+1);
-  [['ALL','All Brands','#526080',TASKS.length,null],...Object.entries(BRANDS).map(([k,v])=>[k,v.name,v.color,bc[k]||0,v.species])]
-    .forEach(([code,name,color,count,species])=>{
-      const b=el('button','pill'+(code===activeBrand?' on':''));
-      const spIcon=species?`<span class="sp-icon">${SP[species]}</span>`:'';
-      b.innerHTML=`<span class="pdot" style="background:${color}"></span><span class="pn">${name}</span>${spIcon}<span class="pc">${count}</span>`;
+  [['ALL','All brands','var(--mu)',TASKS.length],...Object.entries(BRANDS).map(([k,v])=>[k,v.name,v.color,bc[k]||0])]
+    .forEach(([code,name,color,count])=>{
+      const b=el('button','brand-item'+(code===activeBrand?' on':''));
+      b.innerHTML=`<span class="brand-dot" style="background:${color}"></span><span class="brand-item-name">${name}</span><span class="brand-item-cnt">${count}</span>`;
       b.onclick=()=>{activeBrand=code;render();};bn.appendChild(b);
     });
-  const tn=document.getElementById('type-nav');tn.innerHTML='';
-  ['ALL','Enrichment','Birthday','General'].forEach(t=>{
-    const count=t==='ALL'?TASKS.length:TASKS.filter(x=>x.type===t).length;
-    const b=el('button','pill'+(t===activeType?' on':''));
-    b.innerHTML=`<span class="pn">${t==='ALL'?'All Types':t}</span><span class="pc">${count}</span>`;
-    b.onclick=()=>{activeType=t;render();};tn.appendChild(b);
-  });
-  const tl=document.getElementById('team-list');tl.innerHTML='';
-  const tg=el('div','team-grid');
-  Object.entries(PEOPLE).forEach(([k,p])=>{
-    const c=TASKS.filter(t=>t.who===k&&t.stage!=='delivered').length;
-    const isDesigner=p.role==='designer';
-    const w=el('div','team-av-wrap');
-    w.title=`${p.name} · ${p.title}${c?' · '+c+' active':''}`;
-    const ring=isDesigner?`box-shadow:0 0 0 2px #AB7DFF,0 0 8px rgba(171,125,255,.4)`:'';
-    w.innerHTML=`
-      <div style="position:relative;display:inline-block">
-        <div class="person-av" style="background:${p.color};${ring}">${p.initials}</div>
-        ${isDesigner?`<span style="position:absolute;top:-4px;right:-4px;font-size:8px;background:#AB7DFF;color:#fff;border-radius:50%;width:12px;height:12px;display:flex;align-items:center;justify-content:center;font-weight:700">✦</span>`:''}
-      </div>
-      <span class="team-av-name">${p.name.split(' ')[0]}</span>`;
-    tg.appendChild(w);
-  });
-  tl.appendChild(tg);
 }
 
 // ─── KANBAN ──────────────────────────────────────────────────────────────
-function renderCard(task, delay=0){
-  const b=BRANDS[task.brand],p=PEOPLE[task.who]||{initials:task.who||'?',color:'#4A5880'};
+function toggleSpotlight(){
+  spotlightOn=!spotlightOn;
+  const btn=document.getElementById('spotlight-btn');
+  btn.classList.toggle('on',spotlightOn);
+  render();
+}
+function toggleCol(stageId){
+  hiddenCols.has(stageId)?hiddenCols.delete(stageId):hiddenCols.add(stageId);
+  try{localStorage.setItem('mars-hidden-cols',JSON.stringify([...hiddenCols]));}catch(e){}
+  renderKanban();
+}
+
+function renderCard(task,delay=0){
+  const b=BRANDS[task.brand],p=PEOPLE[task.who]||{initials:task.who||'?',color:'#808080'};
   const ov=task.stage!=='delivered'&&isOv(task.due);
   const species=sp(task);
   const card=el('div','card');
   card.style.borderLeftColor=b.color;
   card.style.animationDelay=delay+'ms';
-  if(ov) card.style.boxShadow='inset 0 0 0 1px rgba(232,50,74,.3)';
-  let tags=`<span class="b-tag" style="background:${b.bg};color:${b.color}">${task.brand}</span>`;
+  let tags=`<span class="b-tag" style="background:${b.color}18;color:${b.color}">${task.brand}</span>`;
   tags+=`<span class="sp-tag">${SP[species]}</span>`;
   tags+=`<span class="t-tag">${task.type}</span>`;
   if(task.ss)tags+=`<span class="ss-tag">${task.ss}</span>`;
-  if(ov) tags+=`<span style="font-size:9px;font-weight:700;padding:2px 5px;border-radius:4px;background:rgba(232,50,74,.15);color:var(--red)">OVERDUE</span>`;
+  if(ov)tags+=`<span class="ov-tag">OVERDUE</span>`;
   if(task.stage==='delivered')tags+=`<span class="int-t">INT</span><span class="ext-t${task.ext?'':' pending'}">${task.ext?'EXT':'EXT pend.'}</span>`;
   let foot=`<div class="mav" style="background:${p.color}">${p.initials}</div>`;
   if(task.cmt)foot+=`<span class="c-cmt">💬 ${task.cmt}</span>`;
@@ -785,28 +653,21 @@ function renderKanban(){
   const track=document.getElementById('kanban-track');track.innerHTML='';
   const tasks=filtered();
   STAGES.forEach(stage=>{
-    // Hidden column — show a slim vertical strip to restore it
     if(hiddenCols.has(stage.id)){
       const strip=el('div','col-show-strip');
-      strip.title=`Show ${stage.label}`;
-      strip.textContent=stage.label;
-      strip.style.borderTopColor=stage.color;
-      strip.style.borderTopWidth='2px';
-      strip.onclick=()=>toggleCol(stage.id);
-      track.appendChild(strip);
-      return;
+      strip.title=`Show ${stage.label}`;strip.textContent=stage.label;
+      strip.style.borderTopColor=stage.color;strip.style.borderTopWidth='2px';
+      strip.onclick=()=>toggleCol(stage.id);track.appendChild(strip);return;
     }
     const st=tasks.filter(t=>t.stage===stage.id);
     const col=el('div','col');
-    const head=el('div','col-h');
-    head.style.borderBottomColor=stage.color;
+    const head=el('div','col-h');head.style.borderBottomColor=stage.color;
     const ovCount=st.filter(t=>isOv(t.due)).length;
-    const ovBadge=ovCount?` <span style="font-size:9px;font-weight:700;padding:1px 5px;border-radius:4px;background:rgba(232,50,74,.15);color:var(--red)">⚠${ovCount}</span>`:'';
-    head.innerHTML=`
-      <div style="width:8px;height:8px;border-radius:50%;background:${stage.color};flex-shrink:0"></div>
+    const ovBadge=ovCount?` <span style="font-size:9px;font-weight:700;padding:1px 5px;border-radius:4px;background:rgba(232,50,74,.1);color:var(--red)">⚠${ovCount}</span>`:'';
+    head.innerHTML=`<div style="width:8px;height:8px;border-radius:50%;background:${stage.color};flex-shrink:0"></div>
       <span class="col-h-lbl" style="color:${stage.color}">${stage.label}</span>
       <span class="col-h-n">${st.length}</span>${ovBadge}
-      <button class="col-hide-btn" title="Hide column" onclick="toggleCol('${stage.id}')">✕</button>`;
+      <button class="col-hide-btn" onclick="toggleCol('${stage.id}')">✕</button>`;
     const body=el('div','col-b');
     if(!st.length)body.appendChild(el('div','empty-col','—'));
     else st.forEach((t,i)=>body.appendChild(renderCard(t,i*30)));
@@ -815,31 +676,179 @@ function renderKanban(){
 }
 
 // ─── BANDWIDTH ───────────────────────────────────────────────────────────
+function setSelectedMember(key){
+  selectedMember=key;
+  document.querySelectorAll('.member-card').forEach(c=>{
+    const isSel=c.dataset.key===key;
+    c.classList.toggle('selected',isSel);
+    let chk=c.querySelector('.member-check');
+    if(isSel&&!chk){chk=document.createElement('div');chk.className='member-check';chk.textContent='✓';c.querySelector('.member-av-wrap').appendChild(chk);}
+    else if(!isSel&&chk)chk.remove();
+  });
+  renderPersonDetail();
+}
+
+function renderPersonDetail(){
+  const container=document.getElementById('person-detail');
+  if(!container)return;
+  const p=PEOPLE[selectedMember];if(!p)return;
+  const myTasks=TASKS.filter(t=>t.who===selectedMember&&t.stage!=='delivered');
+  const ovTasks=myTasks.filter(t=>isOv(t.due));
+  const totalH=myTasks.reduce((s,t)=>s+(EFFORT_H[t.type]||3),0);
+  const capacity=40;
+  const withinCap=totalH<=capacity;
+  const completedCnt=TASKS.filter(t=>t.who===selectedMember&&t.stage==='delivered').length;
+  const brandSet=new Set(myTasks.map(t=>t.brand));
+  const copyH=myTasks.filter(t=>COPY_STAGES.includes(t.stage)).reduce((s,t)=>s+(EFFORT_H[t.type]||3),0);
+  const designH=myTasks.filter(t=>DESIGN_STAGES.includes(t.stage)).reduce((s,t)=>s+(EFFORT_H[t.type]||3),0);
+  const finalH=myTasks.filter(t=>DEV_STAGES.includes(t.stage)).reduce((s,t)=>s+(EFFORT_H[t.type]||3),0);
+  const barTotal=Math.max(1,totalH);
+  const sorted=[...myTasks].sort((a,b)=>{
+    const ao=isOv(a.due)?0:1,bo=isOv(b.due)?0:1;
+    if(ao!==bo)return ao-bo;
+    return(a.due||'').localeCompare(b.due||'');
+  });
+  const SHOW=8;
+  const rows=sorted.slice(0,SHOW).map(t=>{
+    const b=BRANDS[t.brand];
+    const stage=STAGE_MAP[t.stage]||{label:t.stage,color:'#888'};
+    const ov=isOv(t.due);
+    const daysDiff=t.due?Math.round((new Date(t.due)-TODAY)/86400000):null;
+    const effort=EFFORT_H[t.type]||3;
+    return`<tr>
+      <td>
+        <div class="task-row-name">${t.name}</div>
+        <div class="task-row-sub">
+          <span class="task-brand-dot" style="background:${b.color}"></span>
+          ${b.name} · ${t.type}
+        </div>
+      </td>
+      <td><div class="stage-cell">
+        <div class="stage-dot" style="background:${stage.color}"></div>
+        <span class="stage-label">${stage.label}</span>
+      </div></td>
+      <td>
+        <div class="due-date">${fmtD(t.due)}</div>
+        ${ov?`<div class="due-overdue">${Math.abs(daysDiff)} days overdue</div>`:''}
+      </td>
+      <td class="effort-cell">${effort}h</td>
+      <td class="link-cell"><a href="https://app.asana.com/0/0/${t.id}" target="_blank" rel="noopener">↗</a></td>
+    </tr>`;
+  }).join('');
+
+  container.innerHTML=`<div class="person-detail-card">
+    <div class="person-detail-top">
+      <div class="person-detail-left">
+        <div class="person-lg-av" style="background:${p.color}">${p.initials}</div>
+        <div>
+          <div class="person-detail-name">${p.name}</div>
+          <div class="person-status${withinCap?'':' over'}">
+            <div class="person-status-dot"></div>
+            ${withinCap?'Within capacity':'Over capacity'}
+          </div>
+          <div class="person-detail-role">${p.title}</div>
+        </div>
+      </div>
+      <button class="assign-btn">+ Assign work</button>
+    </div>
+    <div class="kpi-row">
+      <div class="kpi-box">
+        <div class="kpi-value">${myTasks.length}</div>
+        <div class="kpi-label">Active tasks</div>
+        <div class="kpi-sub">Across ${brandSet.size} brand${brandSet.size!==1?'s':''}</div>
+      </div>
+      <div class="kpi-box">
+        <div class="kpi-value${ovTasks.length?' red':''}">${ovTasks.length}</div>
+        <div class="kpi-label">Overdue</div>
+        <div class="kpi-sub">${ovTasks.length?'Need attention':'All on track'}</div>
+      </div>
+      <div class="kpi-box">
+        <div class="kpi-value">${totalH}h</div>
+        <div class="kpi-label">Assigned this week</div>
+        <div class="kpi-sub">Of ${capacity}h weekly capacity</div>
+      </div>
+      <div class="kpi-box">
+        <div class="kpi-value">${completedCnt}</div>
+        <div class="kpi-label">Completed this week</div>
+        <div class="kpi-sub">Tasks moved to delivered</div>
+      </div>
+    </div>
+    <div class="workload-section">
+      <div class="workload-hd">
+        <span class="workload-title">Weekly workload</span>
+        <div class="workload-legend">
+          <div class="legend-item"><div class="legend-dot" style="background:#4F85F8"></div>With copy</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#AB7DFF"></div>Design</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#FF7A52"></div>Final steps</div>
+        </div>
+      </div>
+      <div class="workload-bar-track">
+        <div class="workload-bar-seg" style="background:#4F85F8;width:0%" data-w="${copyH/barTotal*100}"></div>
+        <div class="workload-bar-seg" style="background:#AB7DFF;width:0%" data-w="${designH/barTotal*100}"></div>
+        <div class="workload-bar-seg" style="background:#FF7A52;width:0%" data-w="${finalH/barTotal*100}"></div>
+      </div>
+    </div>
+    <div class="tasks-section">
+      <div class="tasks-section-hd">
+        <span class="tasks-title">Assigned work <span style="color:var(--mu);font-weight:400">${myTasks.length}</span></span>
+        <span class="tasks-sort">Due date ↑</span>
+      </div>
+      <table class="task-table">
+        <thead><tr>
+          <th>Task / Brand</th><th>Stage</th><th>Due Date</th><th>Effort</th><th></th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+      ${sorted.length>SHOW?`<div class="tasks-show-more">Showing ${SHOW} of ${myTasks.length} active tasks · View all →</div>`:''}
+    </div>
+  </div>`;
+
+  setTimeout(()=>{
+    document.querySelectorAll('.workload-bar-seg[data-w]').forEach(e=>e.style.width=e.dataset.w+'%');
+  },50);
+}
+
 function renderBandwidth(){
-  const active=TASKS.filter(t=>t.stage!=='delivered');
-  const maxP=Math.max(1,...Object.keys(PEOPLE).map(k=>active.filter(t=>t.who===k).length));
-  const pg=document.getElementById('bw-people');pg.innerHTML='';
+  const vb=document.getElementById('vb');
+  vb.innerHTML='';
+  const page=document.createElement('div');
+  page.className='bw-page';
+  page.innerHTML=`
+    <div class="bw-page-hd">
+      <div>
+        <div class="bw-h1">Team bandwidth <span class="bw-badge">Sample data</span></div>
+        <div class="bw-subtitle">A clear view of what's on everyone's plate.</div>
+      </div>
+      <div class="bw-filters">
+        <button class="bw-filter-btn">All brands ▾</button>
+        <button class="bw-filter-btn">Oct 12–16, 2026 ▾</button>
+      </div>
+    </div>
+    <div class="members-section">
+      <div class="members-label">TEAM MEMBERS</div>
+      <div class="member-cards-row" id="member-cards-row"></div>
+    </div>
+    <div id="person-detail"></div>`;
+  vb.appendChild(page);
 
-  const pwC=el('div','bw-card');pwC.innerHTML=`<div class="bw-title">Active tasks by designer</div><div class="bars" id="pbars"></div>`;pg.appendChild(pwC);
-  Object.entries(PEOPLE).forEach(([k,p])=>{const cnt=active.filter(t=>t.who===k).length;const r=el('div','br');r.innerHTML=`<span class="br-lbl">${p.name}</span><div class="br-trk"><div class="br-fill" style="width:0%;background:${p.color}" data-w="${cnt/maxP*100}"></div></div><span class="br-val">${cnt}</span>`;pwC.querySelector('#pbars').appendChild(r);});
-
-  const maxS=Math.max(1,...STAGES.map(s=>active.filter(t=>t.stage===s.id).length));
-  const stC=el('div','bw-card');stC.innerHTML=`<div class="bw-title">Distribution by stage</div><div class="bars" id="sbars"></div>`;pg.appendChild(stC);
-  STAGES.filter(s=>s.id!=='delivered').forEach(s=>{const cnt=active.filter(t=>t.stage===s.id).length;const r=el('div','br');r.innerHTML=`<span class="br-lbl">${s.label}</span><div class="br-trk"><div class="br-fill" style="width:0%;background:${s.color}" data-w="${cnt/maxS*100}"></div></div><span class="br-val">${cnt}</span>`;stC.querySelector('#sbars').appendChild(r);});
-
-  const bg=document.getElementById('bw-brands');bg.innerHTML='';
-  const maxB=Math.max(1,...Object.keys(BRANDS).map(k=>TASKS.filter(t=>t.brand===k).length));
-  const bC=el('div','bw-card');bC.innerHTML=`<div class="bw-title">Total tasks by brand</div><div class="bars" id="bbars"></div>`;bg.appendChild(bC);
-  Object.entries(BRANDS).forEach(([k,v])=>{const cnt=TASKS.filter(t=>t.brand===k).length;const act=TASKS.filter(t=>t.brand===k&&t.stage!=='delivered').length;const r=el('div','br');r.innerHTML=`<span class="br-lbl">${SP[v.species]} ${v.name}</span><div class="br-trk"><div class="br-fill" style="width:0%;background:${v.color}" data-w="${cnt/maxB*100}"></div></div><span class="br-val">${act}</span>`;bC.querySelector('#bbars').appendChild(r);});
-
-  const ng=document.getElementById('notes-grid');ng.innerHTML='';
-  const wins=[{mark:'✅',text:'Enrichment wave delivered across all 7 brands'},{mark:'✅',text:'IAM Cat T1 + T2a external delivery confirmed'},{mark:'✅',text:'NTR + CSR Enrichment cleared INT and EXT'},{mark:'✅',text:'14 of 29 campaigns at Delivered stage'}];
-  const flags=[{mark:'⚠️',text:'GRN + IAM Cat T2a-b — EXT delivery pending'},{mark:'⚠️',text:'SHB Enrichment T2a-b — both INT and EXT pending'},{mark:'⚠️',text:'TEM Enrichment T2a-b — EXT still pending'},{mark:'🔴',text:'IAM Design tasks T1+T2a overdue in Design stage'}];
-  const wC=el('div','note-card');wC.innerHTML=`<div class="note-title"><span>🏆</span> Wins this cycle</div>`;wins.forEach(w=>{const i=el('div','note-item');i.innerHTML=`<span>${w.mark}</span><span>${w.text}</span>`;wC.appendChild(i);});
-  const fC=el('div','note-card');fC.innerHTML=`<div class="note-title"><span>🚩</span> Flags &amp; blockers</div>`;flags.forEach(f=>{const i=el('div','note-item');i.innerHTML=`<span>${f.mark}</span><span>${f.text}</span>`;fC.appendChild(i);});
-  ng.appendChild(wC);ng.appendChild(fC);
-
-  setTimeout(()=>{document.querySelectorAll('.br-fill[data-w]').forEach(el=>{el.style.width=el.dataset.w+'%';});},50);
+  const row=document.getElementById('member-cards-row');
+  Object.entries(PEOPLE).forEach(([key,p])=>{
+    const cnt=TASKS.filter(t=>t.who===key&&t.stage!=='delivered').length;
+    const isSel=selectedMember===key;
+    const card=document.createElement('div');
+    card.className=`member-card${isSel?' selected':''}`;
+    card.dataset.key=key;
+    card.onclick=()=>setSelectedMember(key);
+    card.innerHTML=`
+      <div class="member-av-wrap">
+        <div class="member-av" style="background:${p.color}">${p.initials}</div>
+        ${isSel?'<div class="member-check">✓</div>':''}
+      </div>
+      <div class="member-name">${p.name.split(' ')[0]}</div>
+      <div class="member-tasks-count">${cnt} task${cnt!==1?'s':''}</div>`;
+    row.appendChild(card);
+  });
+  renderPersonDetail();
 }
 
 // ─── CLIENTS ─────────────────────────────────────────────────────────────
@@ -854,18 +863,17 @@ function renderClients(){
     const gr=gradeFromPct(pct);
     const card=el('div','cl-card');
     card.style.animationDelay=(i*40)+'ms';
-    card.style.borderTopColor=brand.color;
-    card.style.borderTopWidth='2px';
+    card.style.borderTopColor=brand.color;card.style.borderTopWidth='2px';
     card.innerHTML=`
       <div class="cl-head">
-        <div class="cl-icon" style="background:${brand.color}">${SP[brand.species]}</div>
+        <div class="cl-icon" style="background:${brand.color}18">${SP[brand.species]}</div>
         <div>
           <div class="cl-code" style="color:${brand.color}">${code}</div>
           <div class="cl-full">${brand.name}</div>
         </div>
         <div style="margin-left:auto;text-align:center">
           <div class="cl-ring-wrap">
-            ${ring(pct, brand.color, 64)}
+            ${ring(pct,brand.color,64)}
             <div class="ring-label">
               <span class="ring-pct" style="color:${brand.color}">${pct}%</span>
               <span class="ring-sublabel">done</span>
@@ -877,18 +885,18 @@ function renderClients(){
       <div class="cl-bar"><div class="cl-bar-fill" style="background:${brand.color};width:0%" data-w="${pct}"></div></div>
       <div class="cl-stats">
         <div class="cl-stat"><div class="cl-stat-v" style="color:${brand.color}">${a}</div><div class="cl-stat-l">Active</div></div>
-        <div class="cl-stat"><div class="cl-stat-v" style="color:#00D7B9">${d}</div><div class="cl-stat-l">Delivered</div></div>
-        <div class="cl-stat"><div class="cl-stat-v" style="color:${o?'#E85560':'#232D50'}">${o}</div><div class="cl-stat-l">Overdue</div></div>
+        <div class="cl-stat"><div class="cl-stat-v" style="color:#00A890">${d}</div><div class="cl-stat-l">Delivered</div></div>
+        <div class="cl-stat"><div class="cl-stat-v" style="color:${o?'var(--red)':'var(--dm)'}">${o}</div><div class="cl-stat-l">Overdue</div></div>
       </div>`;
     grid.appendChild(card);
   });
   setTimeout(()=>{
-    document.querySelectorAll('.cl-bar-fill[data-w]').forEach(el=>el.style.width=el.dataset.w+'%');
+    document.querySelectorAll('.cl-bar-fill[data-w]').forEach(e=>e.style.width=e.dataset.w+'%');
     animateRings();
   },80);
 }
 
-// ─── FIGMA PANEL ─────────────────────────────────────────────────────────
+// ─── FIGMA ────────────────────────────────────────────────────────────────
 function recordOpen(code){try{localStorage.setItem('mars-figma-'+code,Date.now());}catch(e){}setTimeout(renderFigmaGrid,80);}
 function renderFigmaGrid(){
   const grid=document.getElementById('fig-grid');if(!grid)return;grid.innerHTML='';
@@ -896,12 +904,12 @@ function renderFigmaGrid(){
     let ts=null;try{ts=localStorage.getItem('mars-figma-'+code);}catch(e){}
     const at=TASKS.filter(t=>t.brand===code&&t.stage!=='delivered').length;
     const ov=TASKS.filter(t=>t.brand===code&&t.stage!=='delivered'&&isOv(t.due)).length>0;
-    const dot=ov?'#E85560':at>0?brand.color:'#00D7B9';
-    const status=ov?`<span style="color:#E85560">⚠ Overdue</span>`:at>0?`${at} active`:`<span style="color:#00D7B9">✓ Clear</span>`;
+    const dot=ov?'var(--red)':at>0?brand.color:'#3FBB68';
+    const status=ov?`<span style="color:var(--red)">⚠ Overdue</span>`:at>0?`${at} active`:`<span style="color:#3FBB68">✓ Clear</span>`;
     const card=el('div','fig-card');
     card.innerHTML=`
       <div class="fig-card-head">
-        <div class="fig-brand-icon" style="background:${brand.color}">${SP[brand.species]}</div>
+        <div class="fig-brand-icon" style="background:${brand.color}18">${SP[brand.species]}</div>
         <div><div class="fig-brand-name" style="color:${brand.color}">${brand.name}</div><div class="fig-brand-sub">${code} · ${TASKS.filter(t=>t.brand===code).length} campaigns</div></div>
       </div>
       <a class="fig-link" href="${brand.figma}" target="_blank" rel="noopener" onclick="recordOpen('${code}')">🔗 Open in Figma</a>
@@ -914,218 +922,156 @@ function renderFigmaGrid(){
   });
 }
 
-// ─── SATISFACTION PANEL ───────────────────────────────────────────────────
+// ─── SATISFACTION ─────────────────────────────────────────────────────────
 function renderSatisfaction(){
-  // Compute live metrics from TASKS
-  const total = TASKS.length;
-  const delivered = TASKS.filter(t=>t.stage==='delivered');
-  const active = TASKS.filter(t=>t.stage!=='delivered');
+  const total=TASKS.length;
+  const delivered=TASKS.filter(t=>t.stage==='delivered');
+  const active=TASKS.filter(t=>t.stage!=='delivered');
+  const deliveryRate=Math.round(delivered.length/total*100);
+  const intApproved=delivered.filter(t=>t.int===1).length;
+  const extApproved=delivered.filter(t=>t.ext===1).length;
+  const intRate=delivered.length?Math.round(intApproved/delivered.length*100):0;
+  const extRate=delivered.length?Math.round(extApproved/delivered.length*100):0;
+  const ovActive=active.filter(t=>isOv(t.due)).length;
+  const onTimeRate=active.length?Math.round((active.length-ovActive)/active.length*100):100;
+  const totalCmt=TASKS.reduce((s,t)=>s+(t.cmt||0),0);
+  const avgCmt=totalCmt?(totalCmt/total).toFixed(1):'0';
+  const composite=Math.round(deliveryRate*.35+intRate*.25+extRate*.25+onTimeRate*.15);
+  const gr=gradeFromPct(composite);
 
-  // Delivery rate
-  const deliveryRate = Math.round(delivered.length / total * 100);
-
-  // On-time: delivered tasks that were not overdue at delivery (due >= their date — we treat non-null due as approximation)
-  const intApproved = delivered.filter(t=>t.int===1).length;
-  const extApproved = delivered.filter(t=>t.ext===1).length;
-  const intRate = delivered.length ? Math.round(intApproved/delivered.length*100) : 0;
-  const extRate = delivered.length ? Math.round(extApproved/delivered.length*100) : 0;
-
-  // Overall overdue in active tasks
-  const ovActive = active.filter(t=>isOv(t.due)).length;
-  const onTimeRate = active.length ? Math.round((active.length-ovActive)/active.length*100) : 100;
-
-  // Comment load (more comments = more revision friction)
-  const totalCmt = TASKS.reduce((s,t)=>s+(t.cmt||0),0);
-  const avgCmt = totalCmt ? (totalCmt/total).toFixed(1) : '0';
-
-  // Overall composite score (weighted)
-  const composite = Math.round(deliveryRate*0.35 + intRate*0.25 + extRate*0.25 + onTimeRate*0.15);
-
-  // Hero section
-  const gr = gradeFromPct(composite);
-  const hero = document.getElementById('sat-hero');
-  hero.innerHTML=`
-    <div class="sat-score-ring">
-      ${ring(composite,'#00D7B9',100)}
+  document.getElementById('sat-hero').innerHTML=`
+    <div class="sat-score-ring">${ring(composite,'#3FBB68',100)}
       <div class="sat-score-label">
-        <span class="sat-score-n" style="color:#00D7B9">${composite}</span>
+        <span class="sat-score-n" style="color:#3FBB68">${composite}</span>
         <span class="sat-score-sub">/ 100</span>
       </div>
     </div>
     <div class="sat-hero-info">
       <div class="sat-hero-title">Stakeholder Satisfaction</div>
-      <div class="sat-hero-sub">Composite score across delivery, internal and external approvals, and active task health. Feeds from Asana task data via GitHub Actions sync.</div>
+      <div class="sat-hero-sub">Composite score across delivery, internal and external approvals, and active task health.</div>
       <div class="sat-kpi-row">
-        <div class="sat-kpi"><div class="sat-kpi-v" style="color:#00D7B9">${deliveryRate}%</div><div class="sat-kpi-l">Delivery Rate</div></div>
-        <div class="sat-kpi"><div class="sat-kpi-v" style="color:#3FBB68">${intRate}%</div><div class="sat-kpi-l">INT Approved</div></div>
-        <div class="sat-kpi"><div class="sat-kpi-v" style="color:#4F85F8">${extRate}%</div><div class="sat-kpi-l">EXT Approved</div></div>
-        <div class="sat-kpi"><div class="sat-kpi-v" style="color:${onTimeRate>=80?'#F5A823':'#E85560'}">${onTimeRate}%</div><div class="sat-kpi-l">On-Time Active</div></div>
+        <div class="sat-kpi"><div class="sat-kpi-v" style="color:#3FBB68">${deliveryRate}%</div><div class="sat-kpi-l">Delivery Rate</div></div>
+        <div class="sat-kpi"><div class="sat-kpi-v" style="color:#4F85F8">${intRate}%</div><div class="sat-kpi-l">INT Approved</div></div>
+        <div class="sat-kpi"><div class="sat-kpi-v" style="color:var(--acc)">${extRate}%</div><div class="sat-kpi-l">EXT Approved</div></div>
+        <div class="sat-kpi"><div class="sat-kpi-v" style="color:${onTimeRate>=80?'#F5A823':'var(--red)'}">${onTimeRate}%</div><div class="sat-kpi-l">On-Time Active</div></div>
       </div>
     </div>`;
 
-  // Process breakdown
-  const satGrid = document.getElementById('sat-grid');
-  satGrid.innerHTML='';
-
-  // Process health card
-  const procCard = el('div','sat-card');
-  procCard.innerHTML=`<div class="sat-card-title"><span class="sat-ico">⚙️</span> Process Health by Stage</div>`;
-  const processes = [
-    {label:'Copy',stages:COPY_STAGES,color:'#4F85F8'},
-    {label:'Design',stages:DESIGN_STAGES,color:'#AB7DFF'},
-    {label:'Development / Final',stages:DEV_STAGES,color:'#F5A823'},
-  ];
-  processes.forEach(proc=>{
-    const procTasks = TASKS.filter(t=>proc.stages.includes(t.stage));
-    const procOv = procTasks.filter(t=>isOv(t.due)).length;
-    const health = procTasks.length ? Math.round((procTasks.length-procOv)/procTasks.length*100) : 100;
-    const badgeColor = health>=80?'rgba(0,215,185,.15)':health>=60?'rgba(245,168,35,.15)':'rgba(232,50,74,.15)';
-    const badgeText  = health>=80?'#00D7B9':health>=60?'#F5A823':'#E85560';
-    const row = el('div','process-row');
-    row.innerHTML=`
-      <span class="process-name" style="color:${proc.color}">${proc.label}</span>
-      <div class="process-bar-wrap"><div class="process-bar-fill" style="background:${proc.color};width:0%" data-w="${health}"></div></div>
-      <span class="process-pct" style="color:${proc.color}">${health}%</span>
-      <span class="process-badge" style="background:${badgeColor};color:${badgeText}">${procTasks.length} tasks · ${procOv} overdue</span>`;
-    procCard.appendChild(row);
-  });
+  const satGrid=document.getElementById('sat-grid');satGrid.innerHTML='';
+  const procCard=el('div','sat-card');
+  procCard.innerHTML=`<div class="sat-card-title">⚙️ Process Health by Stage</div>`;
+  [{label:'Copy',stages:COPY_STAGES,color:'#4F85F8'},{label:'Design',stages:DESIGN_STAGES,color:'#AB7DFF'},{label:'Development / Final',stages:DEV_STAGES,color:'#F5A823'}]
+    .forEach(proc=>{
+      const pt=TASKS.filter(t=>proc.stages.includes(t.stage));
+      const po=pt.filter(t=>isOv(t.due)).length;
+      const h=pt.length?Math.round((pt.length-po)/pt.length*100):100;
+      const bc=h>=80?'rgba(63,187,104,.12)':h>=60?'rgba(245,168,35,.12)':'rgba(232,50,74,.1)';
+      const bt=h>=80?'#3FBB68':h>=60?'#F5A823':'var(--red)';
+      const r=el('div','process-row');
+      r.innerHTML=`<span class="process-name" style="color:${proc.color}">${proc.label}</span>
+        <div class="process-bar-wrap"><div class="process-bar-fill" style="background:${proc.color};width:0%" data-w="${h}"></div></div>
+        <span class="process-pct" style="color:${proc.color}">${h}%</span>
+        <span class="process-badge" style="background:${bc};color:${bt}">${pt.length} tasks · ${po} overdue</span>`;
+      procCard.appendChild(r);
+    });
   satGrid.appendChild(procCard);
 
-  // Approval pipeline card
-  const appCard = el('div','sat-card');
-  appCard.innerHTML=`<div class="sat-card-title"><span class="sat-ico">✅</span> Approval Pipeline</div>`;
-  const appRows = [
-    {label:'INT delivered',val:intApproved,total:delivered.length,color:'#3FBB68'},
-    {label:'EXT delivered',val:extApproved,total:delivered.length,color:'#4F85F8'},
-    {label:'EXT pending',val:delivered.filter(t=>t.ext===0).length,total:delivered.length,color:'#F5A823'},
-    {label:'Avg comments/task',val:avgCmt,total:null,color:'#AB7DFF'},
-  ];
-  appRows.forEach(row=>{
-    const pct=row.total?Math.round(row.val/row.total*100):null;
-    const r=el('div','process-row');
-    r.innerHTML=`<span class="process-name">${row.label}</span>
-      ${pct!=null?`<div class="process-bar-wrap"><div class="process-bar-fill" style="background:${row.color};width:0%" data-w="${pct}"></div></div>`:``}
-      <span class="process-pct" style="color:${row.color}">${pct!=null?pct+'%':row.val}</span>`;
-    appCard.appendChild(r);
-  });
+  const appCard=el('div','sat-card');
+  appCard.innerHTML=`<div class="sat-card-title">✅ Approval Pipeline</div>`;
+  [{label:'INT delivered',val:intApproved,total:delivered.length,color:'#3FBB68'},{label:'EXT delivered',val:extApproved,total:delivered.length,color:'#4F85F8'},{label:'EXT pending',val:delivered.filter(t=>t.ext===0).length,total:delivered.length,color:'#F5A823'},{label:'Avg comments/task',val:avgCmt,total:null,color:'#AB7DFF'}]
+    .forEach(row=>{
+      const pct=row.total?Math.round(row.val/row.total*100):null;
+      const r=el('div','process-row');
+      r.innerHTML=`<span class="process-name">${row.label}</span>
+        ${pct!=null?`<div class="process-bar-wrap"><div class="process-bar-fill" style="background:${row.color};width:0%" data-w="${pct}"></div></div>`:''}
+        <span class="process-pct" style="color:${row.color}">${pct!=null?pct+'%':row.val}</span>`;
+      appCard.appendChild(r);
+    });
   satGrid.appendChild(appCard);
 
-  // Comment sentiment feed card
-  const cmtCard = el('div','sat-card');
-  cmtCard.innerHTML=`<div class="sat-card-title"><span class="sat-ico">💬</span> Comment Sentiment Feed</div>`;
-  const pos = COMMENT_FEED.filter(c=>c.sent==='pos').length;
-  const neg = COMMENT_FEED.filter(c=>c.sent==='neg').length;
-  const sentScore = Math.round(pos/(pos+neg)*100);
-  const sentRow = el('div','process-row');
+  const cmtCard=el('div','sat-card');
+  cmtCard.innerHTML=`<div class="sat-card-title">💬 Comment Sentiment</div>`;
+  const pos=COMMENT_FEED.filter(c=>c.sent==='pos').length;
+  const neg=COMMENT_FEED.filter(c=>c.sent==='neg').length;
+  const sentScore=Math.round(pos/(pos+neg)*100);
+  const sentRow=el('div','process-row');
   sentRow.innerHTML=`<span class="process-name">Positive sentiment</span>
-    <div class="process-bar-wrap"><div class="process-bar-fill" style="background:var(--teal);width:0%" data-w="${sentScore}"></div></div>
-    <span class="process-pct" style="color:var(--teal)">${sentScore}%</span>`;
+    <div class="process-bar-wrap"><div class="process-bar-fill" style="background:#3FBB68;width:0%" data-w="${sentScore}"></div></div>
+    <span class="process-pct" style="color:#3FBB68">${sentScore}%</span>`;
   cmtCard.appendChild(sentRow);
   COMMENT_FEED.forEach(c=>{
     const brand=BRANDS[c.brand];
     const div=el('div','sat-comment');
-    div.innerHTML=`<div class="sat-comment-sent ${c.sent}">${c.sent==='pos'?'↑':c.sent==='neg'?'↓':'·'}</div>
+    div.innerHTML=`<div class="sat-comment-sent ${c.sent}">${c.sent==='pos'?'↑':'↓'}</div>
       <div class="sat-comment-text">
-        <span class="sat-comment-brand" style="background:${brand.bg};color:${brand.color}">${c.brand}</span>
-        ${c.text}
-        <div class="sat-comment-meta">${c.who} · ${c.date}</div>
+        <span class="sat-comment-brand" style="background:${brand.color}18;color:${brand.color}">${c.brand}</span>
+        ${c.text}<div class="sat-comment-meta">${c.who} · ${c.date}</div>
       </div>`;
     cmtCard.appendChild(div);
   });
   satGrid.appendChild(cmtCard);
 
-  // Brand satisfaction grid
-  const bsg = document.getElementById('brand-sat-grid');
-  bsg.innerHTML='';
+  const bsg=document.getElementById('brand-sat-grid');bsg.innerHTML='';
   Object.entries(BRANDS).forEach(([code,brand])=>{
-    const bt = TASKS.filter(t=>t.brand===code);
-    const d  = bt.filter(t=>t.stage==='delivered');
-    const extOk = d.filter(t=>t.ext===1).length;
-    const intOk = d.filter(t=>t.int===1).length;
-    const ov = bt.filter(t=>t.stage!=='delivered'&&isOv(t.due)).length;
-    const score = bt.length ? Math.round(
-      (d.length/bt.length)*40 +
-      (d.length?extOk/d.length:0)*35 +
-      (d.length?intOk/d.length:0)*25
-    ) : 0;
-    const card = el('div','brand-sat-card');
+    const bt=TASKS.filter(t=>t.brand===code);
+    const d=bt.filter(t=>t.stage==='delivered');
+    const extOk=d.filter(t=>t.ext===1).length;
+    const intOk=d.filter(t=>t.int===1).length;
+    const ov=bt.filter(t=>t.stage!=='delivered'&&isOv(t.due)).length;
+    const score=bt.length?Math.round((d.length/bt.length)*40+(d.length?extOk/d.length:0)*35+(d.length?intOk/d.length:0)*25):0;
+    const card=el('div','brand-sat-card');
     card.innerHTML=`
-      <div class="brand-sat-icon" style="background:${brand.bg}">${SP[brand.species]}</div>
+      <div class="brand-sat-icon" style="background:${brand.color}18">${SP[brand.species]}</div>
       <div class="brand-sat-info">
         <div class="brand-sat-name" style="color:${brand.color}">${brand.name}</div>
         <div style="display:flex;align-items:baseline;gap:6px">
           <div class="brand-sat-score" style="color:${brand.color}">${score}</div>
-          <div class="brand-sat-sub">/100${ov?` · <span style="color:var(--red)">⚠ ${ov} overdue</span>`:''}</div>
+          <div class="brand-sat-sub">/100${ov?` · <span style="color:var(--red)">⚠ ${ov}</span>`:''}</div>
         </div>
         <div class="brand-sat-bar"><div class="brand-sat-fill" style="background:${brand.color};width:0%" data-w="${score}"></div></div>
       </div>`;
     bsg.appendChild(card);
   });
 
-  // Animate all bars + rings
   setTimeout(()=>{
-    document.querySelectorAll('#vs .process-bar-fill[data-w], #vs .brand-sat-fill[data-w]').forEach(e=>e.style.width=e.dataset.w+'%');
+    document.querySelectorAll('#vs .process-bar-fill[data-w],#vs .brand-sat-fill[data-w]').forEach(e=>e.style.width=e.dataset.w+'%');
     animateRings();
   },80);
 }
 
 // ─── VIEW SWITCHING ───────────────────────────────────────────────────────
+const VIEW_NAMES={vk:'Kanban',vb:'Bandwidth',vc:'Clients',vf:'Figma',vs:'Satisfaction'};
+
 function setView(id,btn){
   ['vk','vb','vc','vf','vs'].forEach(v=>document.getElementById(v).hidden=v!==id);
-  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t===btn));
+  document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('on',b===btn));
+  document.getElementById('breadcrumb-curr').textContent=VIEW_NAMES[id]||id;
+  if(id==='vb')renderBandwidth();
   if(id==='vc')setTimeout(()=>{animateRings();document.querySelectorAll('.cl-bar-fill[data-w]').forEach(e=>e.style.width=e.dataset.w+'%');},50);
-  if(id==='vb')setTimeout(()=>{document.querySelectorAll('.br-fill[data-w]').forEach(e=>e.style.width=e.dataset.w+'%');},50);
   if(id==='vs')renderSatisfaction();
 }
 
-// ─── LIVE DATA LOADER ────────────────────────────────────────────────────
-const DEMO_TASKS = [...TASKS];
-
-function applyLiveData(json) {
-  if (!json || !Array.isArray(json.tasks) || !json.tasks.length) return false;
-  const live = json.tasks.map(t => {
-    const whoKey = Object.entries(PEOPLE).find(([,p]) => p.initials === t.who)?.[0] || null;
-    return {
-      id:    t.id,
-      name:  t.name,
-      brand: t.brand,
-      stage: t.stage,
-      type:  t.type || 'General',
-      who:   whoKey || t.who,
-      due:   t.due   || '',
-      cmt:   t.cmt   || 0,
-      ss:    t.ss    || null,
-      int:   t.int   != null ? t.int : (t.stage === 'delivered' ? 1 : undefined),
-      ext:   t.ext   != null ? t.ext : undefined,
-    };
+// ─── LIVE DATA ─────────────────────────────────────────────────────────────
+function applyLiveData(json){
+  if(!json||!Array.isArray(json.tasks)||!json.tasks.length)return false;
+  const live=json.tasks.map(t=>{
+    const whoKey=Object.entries(PEOPLE).find(([,p])=>p.initials===t.who)?.[0]||null;
+    return{id:t.id,name:t.name,brand:t.brand,stage:t.stage,type:t.type||'General',who:whoKey||t.who,due:t.due||'',cmt:t.cmt||0,ss:t.ss||null,int:t.int!=null?t.int:(t.stage==='delivered'?1:undefined),ext:t.ext!=null?t.ext:undefined};
   });
-  TASKS.length = 0;
-  live.forEach(t => TASKS.push(t));
-  const sub = document.querySelector('.brand-sub');
-  if (sub) {
-    const ts = json.updated_at ? ' · ' + json.updated_at : '';
-    sub.innerHTML = `<span class="pulse"></span>effem.com · live${ts}`;
-  }
+  TASKS.length=0;live.forEach(t=>TASKS.push(t));
   return true;
 }
-
-async function loadLiveData() {
-  try {
-    const resp = await fetch('./data.json', { cache: 'no-cache' });
-    if (!resp.ok) throw new Error(resp.status);
-    const json = await resp.json();
-    const applied = applyLiveData(json);
-    if (applied) {
-      try { localStorage.setItem('mars-sync', Date.now()); } catch(e) {}
-      loadSyncTime();
-    }
-  } catch (_) {
-    // Running as artifact or data.json not yet generated — use demo data silently
-  }
+async function loadLiveData(){
+  try{
+    const resp=await fetch('./data.json',{cache:'no-cache'});
+    if(!resp.ok)throw new Error(resp.status);
+    const json=await resp.json();
+    if(applyLiveData(json)){try{localStorage.setItem('mars-sync',Date.now());}catch(e){}loadSyncTime();}
+  }catch(_){}
 }
 
 // ─── INIT ─────────────────────────────────────────────────────────────────
-function render(){renderStats();renderToday();renderSidebar();renderKanban();renderBandwidth();renderClients();renderFigmaGrid();initAccordions();}
+function render(){renderStats();renderToday();renderSidebar();renderKanban();renderClients();renderFigmaGrid();}
 loadSyncTime();
 loadLiveData().then(render);
 </script>
