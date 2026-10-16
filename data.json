@@ -123,6 +123,160 @@
       "who": "LM",
       "due": "2026-09-30",
       "cmt": 0
+    },
+    {
+      "id": 25102,
+      "asana_gid": "1219284266325102",
+      "name": "TEM Holiday Contingency Email_WITHIN Edits Applied",
+      "brand": "TEM",
+      "stage": "inprocess",
+      "type": "Holiday",
+      "who": "LM",
+      "due": "2026-10-20",
+      "cmt": 0
+    },
+    {
+      "id": 74578,
+      "asana_gid": "1219284236674578",
+      "name": "TEM Holiday Contingency Email_Draft Creative",
+      "brand": "TEM",
+      "stage": "design",
+      "type": "Holiday",
+      "who": "LM",
+      "due": "2026-10-16",
+      "cmt": 0
+    },
+    {
+      "id": 69658,
+      "asana_gid": "1219283967869658",
+      "name": "Sheba Holiday Contingency Email_WITHIN Edits Applied",
+      "brand": "SHB",
+      "stage": "inprocess",
+      "type": "Holiday",
+      "who": "LM",
+      "due": "",
+      "cmt": 0
+    },
+    {
+      "id": 14673,
+      "asana_gid": "1219283981214673",
+      "name": "Sheba Holiday Contingency Email_Draft Creative",
+      "brand": "SHB",
+      "stage": "design",
+      "type": "Holiday",
+      "who": "LM",
+      "due": "",
+      "cmt": 0
+    },
+    {
+      "id": 34310,
+      "asana_gid": "1219284218234310",
+      "name": "NTR Holiday Contingency Email_WITHIN Edits Applied",
+      "brand": "NTR",
+      "stage": "inprocess",
+      "type": "Holiday",
+      "who": "LM",
+      "due": "2026-10-20",
+      "cmt": 0
+    },
+    {
+      "id": 92079,
+      "asana_gid": "1219284166692079",
+      "name": "NTR Holiday Contingency Email_Draft Creative",
+      "brand": "NTR",
+      "stage": "design",
+      "type": "Holiday",
+      "who": "LM",
+      "due": "2026-10-16",
+      "cmt": 0
+    },
+    {
+      "id": 58703,
+      "asana_gid": "1219284218058703",
+      "name": "PED Holiday Contingency Email_WITHIN Edits Applied",
+      "brand": "PED",
+      "stage": "inprocess",
+      "type": "Holiday",
+      "who": "LM",
+      "due": "2026-10-20",
+      "cmt": 0
+    },
+    {
+      "id": 58057,
+      "asana_gid": "1219284009558057",
+      "name": "PED Holiday Contingency Email_Draft Creative",
+      "brand": "PED",
+      "stage": "design",
+      "type": "Holiday",
+      "who": "LM",
+      "due": "2026-10-16",
+      "cmt": 0
+    },
+    {
+      "id": 40220,
+      "asana_gid": "1219284009440220",
+      "name": "IAMS Holiday Contingency Email_WITHIN Edits Applied",
+      "brand": "IAM",
+      "stage": "inprocess",
+      "type": "Holiday",
+      "who": "LM",
+      "due": "2026-10-20",
+      "cmt": 0
+    },
+    {
+      "id": 39850,
+      "asana_gid": "1219284009439850",
+      "name": "IAMS Holiday Contingency Email_Draft Creative",
+      "brand": "IAM",
+      "stage": "design",
+      "type": "Holiday",
+      "who": "LM",
+      "due": "2026-10-16",
+      "cmt": 0
+    },
+    {
+      "id": 92007,
+      "asana_gid": "1219283967392007",
+      "name": "GRN Holiday Contingency Email_WITHIN Edits Applied",
+      "brand": "GRN",
+      "stage": "inprocess",
+      "type": "Holiday",
+      "who": "LM",
+      "due": "2026-10-20",
+      "cmt": 0
+    },
+    {
+      "id": 79435,
+      "asana_gid": "1219284217879435",
+      "name": "GRN Holiday Contingency Email_Draft Creative",
+      "brand": "GRN",
+      "stage": "design",
+      "type": "Holiday",
+      "who": "LM",
+      "due": "2026-10-16",
+      "cmt": 0
+    },
+    {
+      "id": 38154,
+      "asana_gid": "1219283947238154",
+      "name": "CSR Holiday Contingency Email_WITHIN Edits Applied",
+      "brand": "CSR",
+      "stage": "inprocess",
+      "type": "Holiday",
+      "who": "LM",
+      "due": "",
+      "cmt": 0
+    },
+    {
+      "id": 13928,
+      "asana_gid": "1219283879313928",
+      "name": "CSR Holiday Contingency Email_Draft Creative",
+      "brand": "CSR",
+      "stage": "design",
+      "type": "Holiday",
+      "who": "LM",
+      "due": "",
+      "cmt": 0
     }
   ]
 }
