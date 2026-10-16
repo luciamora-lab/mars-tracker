@@ -1,0 +1,128 @@
+{
+  "updated_at": "2026-10-16",
+  "source": "asana-live",
+  "project": "1211470217061171",
+  "tasks": [
+    {
+      "id": 49574,
+      "asana_gid": "1218726733249574",
+      "name": "2026_Greenies_DealDay_Broadcast Email",
+      "brand": "GRN",
+      "stage": "with-copy",
+      "type": "General",
+      "who": "\u2014",
+      "due": "",
+      "cmt": 0
+    },
+    {
+      "id": 22404,
+      "asana_gid": "1218182761222404",
+      "name": "2026_Pedigree_Birthday_T1_Triggered Journey",
+      "brand": "PED",
+      "stage": "with-copy",
+      "type": "Birthday",
+      "who": "EW",
+      "due": "2026-09-21",
+      "cmt": 0
+    },
+    {
+      "id": 49646,
+      "asana_gid": "1219284220449646",
+      "name": "TEM Holiday Contingency Email_Final Email Design",
+      "brand": "TEM",
+      "stage": "design",
+      "type": "Holiday",
+      "who": "LM",
+      "due": "2026-10-22",
+      "cmt": 0
+    },
+    {
+      "id": 9471,
+      "asana_gid": "1219283967809471",
+      "name": "Sheba Holiday Contingency Email_Final Email Design",
+      "brand": "SHB",
+      "stage": "design",
+      "type": "Holiday",
+      "who": "LM",
+      "due": "2026-10-22",
+      "cmt": 0
+    },
+    {
+      "id": 41385,
+      "asana_gid": "1219284009641385",
+      "name": "NTR Holiday Contingency Email_Final Email Design",
+      "brand": "NTR",
+      "stage": "design",
+      "type": "Holiday",
+      "who": "LM",
+      "due": "2026-10-19",
+      "cmt": 0
+    },
+    {
+      "id": 79252,
+      "asana_gid": "1219284166479252",
+      "name": "PED Holiday Contingency Email_Final Email Design",
+      "brand": "PED",
+      "stage": "design",
+      "type": "Holiday",
+      "who": "LM",
+      "due": "2026-10-19",
+      "cmt": 0
+    },
+    {
+      "id": 58181,
+      "asana_gid": "1219284009358181",
+      "name": "IAMS Holiday Contingency Email_Final Email Design",
+      "brand": "IAM",
+      "stage": "design",
+      "type": "Holiday",
+      "who": "LM",
+      "due": "2026-10-19",
+      "cmt": 0
+    },
+    {
+      "id": 96637,
+      "asana_gid": "1219284217796637",
+      "name": "GRN Holiday Contingency Email_Final Email Design",
+      "brand": "GRN",
+      "stage": "final",
+      "type": "Holiday",
+      "who": "LM",
+      "due": "2026-10-14",
+      "cmt": 0
+    },
+    {
+      "id": 18783,
+      "asana_gid": "1219283947218783",
+      "name": "CSR Holiday Contingency Email_Final Email Design",
+      "brand": "CSR",
+      "stage": "final",
+      "type": "Holiday",
+      "who": "LM",
+      "due": "2026-10-14",
+      "cmt": 0
+    },
+    {
+      "id": 29799,
+      "asana_gid": "1218726733329799",
+      "name": "2026_Greenies_DealDay_Broadcast Email",
+      "brand": "GRN",
+      "stage": "design",
+      "type": "General",
+      "who": "\u2014",
+      "due": "",
+      "cmt": 0
+    },
+    {
+      "id": 15683,
+      "asana_gid": "1218182630115683",
+      "name": "2026_Pedigree_Birthday_T1_Triggered Journey",
+      "brand": "PED",
+      "stage": "final",
+      "type": "Birthday",
+      "who": "LM",
+      "due": "2026-09-30",
+      "cmt": 0
+    }
+  ]
+}
