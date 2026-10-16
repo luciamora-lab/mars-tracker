@@ -1,0 +1,972 @@
+<title>Mars Creative Tracker</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@500;600;700;800&display=swap">
+<style>
+/* ─ Mars brand: cobalt #0000A0 / teal #00D7B9 / dark navy palette ─ */
+:root {
+  --bg:    #05060F;
+  --sf:    #0A0C1B;
+  --sf2:   #0E1228;
+  --sf3:   #141A35;
+  --bd:    #1C2645;
+  --bd2:   #263055;
+
+  --mars:  #0000A0;
+  --acc:   #3B3BF5;
+  --acc-l: #5B5BFF;
+  --teal:  #00D7B9;
+  --teal-d:#00A890;
+
+  --fg:    #DDE3FF;
+  --fg2:   #B8C2E8;
+  --mu:    #4A5880;
+  --dm:    #232D50;
+
+  --red:   #E8324A;
+  --amber: #F5A623;
+
+  --csr:#4F85F8; --csr-bg:#0D1835;
+  --grn:#3FBB68; --grn-bg:#081E10;
+  --iam:#FF7A52; --iam-bg:#200D08;
+  --ped:#E85560; --ped-bg:#1E080C;
+  --ntr:#C49B6C; --ntr-bg:#1A1208;
+  --shb:#AB7DFF; --shb-bg:#130B28;
+  --tem:#F5A823; --tem-bg:#1E1408;
+
+  color-scheme: dark;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background:var(--bg);color:var(--fg);
+  font-family:'Inter',system-ui,sans-serif;font-size:13px;line-height:1.5;
+  overflow:hidden;
+  padding-left:max(0px,env(safe-area-inset-left,0px));
+  padding-right:max(0px,env(safe-area-inset-right,0px));
+}
+
+/* ─ LAYOUT ─ */
+.app{display:grid;grid-template-columns:220px 1fr;grid-template-rows:56px 1fr;height:100%}
+
+/* ─ TOP BAR ─ */
+.topbar{
+  grid-column:1/-1;
+  background:linear-gradient(90deg,#05060F 0%,#080B20 60%,#060916 100%);
+  border-bottom:1px solid var(--bd);
+  display:flex;align-items:center;gap:10px;padding:0 16px;
+  position:sticky;top:env(safe-area-inset-top,0px);z-index:20;
+}
+.lockup{display:flex;align-items:center;gap:10px;flex-shrink:0}
+
+/* ─ MARS M LOGO ─ updated to split-color proposal */
+.mars-m{
+  width:40px;height:40px;border-radius:10px;flex-shrink:0;
+  background:#fff;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 0 16px rgba(0,0,160,.3);
+  overflow:hidden;
+}
+.mars-m svg{width:30px;height:20px}
+
+.brand-name{font-family:'Inter Tight',sans-serif;font-size:15px;font-weight:800;letter-spacing:-0.4px;color:var(--fg)}
+.brand-sub{font-size:9.5px;color:var(--mu);margin-top:-1px;display:flex;align-items:center;gap:4px}
+.pulse{width:5px;height:5px;border-radius:50%;background:var(--teal);box-shadow:0 0 8px var(--teal);animation:pls 2s infinite}
+@keyframes pls{0%,100%{opacity:1}50%{opacity:.4}}
+
+.chips{display:flex;gap:5px;flex:1;overflow:hidden}
+.chip{display:flex;align-items:center;gap:6px;background:var(--sf2);border:1px solid var(--bd);border-radius:7px;padding:5px 11px;font-size:11px;white-space:nowrap;cursor:default}
+.chip-n{font-family:'Inter Tight',sans-serif;font-size:15px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1}
+.chip-l{font-size:10px;color:var(--mu);margin-top:1px}
+.chip-inner{display:flex;flex-direction:column}
+.chip.danger .chip-n{color:var(--red)}
+.chip.ok .chip-n{color:var(--teal)}
+.chip.warn .chip-n{color:var(--amber)}
+.chip.acc .chip-n{color:var(--acc-l)}
+
+.topbar-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.tabs{display:flex;background:var(--sf2);border:1px solid var(--bd);border-radius:8px;padding:3px}
+.tab{background:none;border:none;color:var(--mu);font:12px 'Inter',sans-serif;padding:5px 11px;border-radius:5px;cursor:pointer;transition:all .15s;white-space:nowrap}
+.tab.on{background:var(--acc);color:#fff;font-weight:600;box-shadow:0 2px 10px rgba(59,59,245,.4)}
+
+.refresh-wrap{display:flex;flex-direction:column;align-items:flex-end}
+.refresh-btn{display:flex;align-items:center;gap:5px;background:none;border:1px solid var(--bd);border-radius:7px;color:var(--mu);font:11px 'Inter',sans-serif;padding:5px 10px;cursor:pointer;transition:all .15s}
+.refresh-btn:hover{background:var(--sf3);color:var(--fg);border-color:var(--bd2)}
+.refresh-btn:disabled{opacity:.4;cursor:not-allowed}
+.refresh-btn.spinning .ri{animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ri{display:inline-block}
+.last-sync{font-size:9px;color:var(--dm);text-align:right;margin-top:2px}
+
+/* ─ SIDEBAR ─ */
+.sidebar{
+  background:var(--sf);border-right:1px solid var(--bd);
+  overflow-y:auto;padding:14px 10px;display:flex;flex-direction:column;gap:14px;
+  background-image:url("data:image/svg+xml,%3Csvg width='80' height='80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg opacity='.04' fill='%23fff'%3E%3Cellipse cx='34' cy='50' rx='14' ry='12'/%3E%3Cellipse cx='16' cy='30' rx='6' ry='7'/%3E%3Cellipse cx='30' cy='22' rx='6' ry='7'/%3E%3Cellipse cx='42' cy='22' rx='6' ry='7'/%3E%3Cellipse cx='56' cy='30' rx='6' ry='7'/%3E%3C/g%3E%3C/svg%3E");
+  background-size:80px 80px;
+}
+.sidebar::-webkit-scrollbar{width:3px}
+.sidebar::-webkit-scrollbar-thumb{background:var(--bd);border-radius:2px}
+.g-lbl{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--dm);padding:0 7px;margin-bottom:4px}
+.pill-list{display:flex;flex-direction:column;gap:1px}
+.pill{display:flex;align-items:center;gap:8px;background:none;border:none;color:var(--mu);font:12px 'Inter',sans-serif;padding:7px 8px;border-radius:8px;cursor:pointer;text-align:left;width:100%;transition:background .12s,color .12s}
+.pill:hover{background:var(--sf2);color:var(--fg2)}
+.pill.on{background:rgba(59,59,245,.15);color:var(--fg);border:1px solid rgba(59,59,245,.25)}
+.pill:not(.on){border:1px solid transparent}
+.pdot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.pn{flex:1;font-size:11.5px}
+.pc{font-size:10px;background:var(--sf3);border-radius:4px;padding:1px 6px;font-variant-numeric:tabular-nums;color:var(--dm);font-family:'Inter Tight',sans-serif;font-weight:600}
+.pill.on .pc{color:var(--mu)}
+.sp-icon{font-size:12px;line-height:1}
+
+.skill-pill{display:flex;align-items:center;gap:8px;background:rgba(0,215,185,.07);border:1px solid rgba(0,215,185,.18);border-radius:9px;padding:9px 10px;cursor:pointer;transition:background .12s;margin:0 1px}
+.skill-pill:hover{background:rgba(0,215,185,.13)}
+.skill-pill .sk-name{font-size:11.5px;font-weight:600;color:var(--teal)}
+.skill-pill .sk-sub{font-size:9px;color:var(--mu);margin-top:1px}
+.skill-pill .sk-ico{font-size:18px;flex-shrink:0}
+
+.person-av{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;flex-shrink:0;border:2px solid var(--bd)}
+.person-name{flex:1;font-size:12px;color:var(--mu)}
+.person-n{font-family:'Inter Tight',sans-serif;font-size:11px;font-weight:600;color:var(--dm)}
+.person-row{display:flex;align-items:center;gap:8px;padding:5px 8px}
+/* compact avatar grid for large teams */
+.team-grid{display:flex;flex-wrap:wrap;gap:6px;padding:4px 8px}
+.team-av-wrap{display:flex;flex-direction:column;align-items:center;gap:2px;cursor:default}
+.team-av-wrap .person-av{width:30px;height:30px;font-size:8.5px}
+.team-av-name{font-size:8px;color:var(--dm);text-align:center;max-width:32px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* ─ MAIN ─ */
+.main{overflow:hidden;display:flex;flex-direction:column}
+
+/* ─ TODAY BANNER ─ */
+.today-banner{
+  display:flex;align-items:center;gap:10px;padding:9px 16px;
+  background:linear-gradient(90deg,rgba(232,50,74,.1) 0%,transparent 100%);
+  border-bottom:1px solid var(--bd);flex-shrink:0;
+}
+.today-label{font-size:11px;color:var(--red);font-weight:600;display:flex;align-items:center;gap:5px;flex-shrink:0}
+.overdue-groups{display:flex;gap:10px;flex:1;overflow:hidden;align-items:center;flex-wrap:wrap}
+.ov-group{display:flex;align-items:center;gap:4px}
+.ov-group-lbl{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:2px 6px;border-radius:4px}
+.ov-group-lbl.copy{background:rgba(79,133,248,.15);color:#4F85F8}
+.ov-group-lbl.design{background:rgba(171,125,255,.15);color:#AB7DFF}
+.ov-group-lbl.dev{background:rgba(245,168,35,.15);color:#F5A823}
+.urg-chip{display:flex;align-items:center;gap:5px;background:rgba(232,50,74,.1);border:1px solid rgba(232,50,74,.25);border-radius:5px;padding:3px 8px;font-size:10.5px;color:var(--red);white-space:nowrap}
+
+/* ─ KANBAN ─ */
+#vk{flex:1;overflow:hidden;display:flex;flex-direction:column}
+.k-scroll{flex:1;overflow-x:auto;overflow-y:hidden;padding:14px}
+.k-track{display:flex;gap:10px;height:100%;min-width:max-content}
+.col{width:230px;flex-shrink:0;display:flex;flex-direction:column}
+.col-h{display:flex;align-items:center;gap:7px;padding-bottom:10px;margin-bottom:10px;border-bottom:2px solid}
+.col-h-lbl{font-size:12px;font-weight:700;flex:1;font-family:'Inter Tight',sans-serif}
+.col-h-n{font-size:10px;background:var(--sf3);color:var(--mu);padding:2px 7px;border-radius:8px;font-variant-numeric:tabular-nums;font-weight:600}
+.col-b{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:6px}
+.col-b::-webkit-scrollbar{width:3px}
+.col-b::-webkit-scrollbar-thumb{background:var(--bd);border-radius:2px}
+.empty-col{border:1px dashed var(--bd);border-radius:9px;display:flex;align-items:center;justify-content:center;height:70px;font-size:11px;color:var(--dm)}
+
+.card{
+  background:var(--sf);border:1px solid var(--bd);border-left:3px solid;
+  border-radius:9px;padding:10px 10px 9px 9px;cursor:pointer;
+  transition:transform .14s,box-shadow .14s,border-color .14s;
+}
+.card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.4)}
+.c-name{font-size:11.5px;font-weight:600;margin-bottom:7px;line-height:1.35;font-family:'Inter Tight',sans-serif}
+.c-tags{display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin-bottom:7px}
+.b-tag{font-size:9px;font-weight:800;padding:2px 6px;border-radius:4px;letter-spacing:.05em}
+.t-tag{font-size:9.5px;color:var(--mu);background:var(--sf2);padding:2px 6px;border-radius:4px}
+.ss-tag{font-size:9.5px;font-weight:600;padding:2px 6px;border-radius:4px;background:rgba(255,122,82,.12);color:#FF7A52}
+.sp-tag{font-size:11px;line-height:1}
+.int-t{font-size:9px;font-weight:700;padding:2px 5px;border-radius:4px;background:rgba(59,59,245,.15);color:var(--acc-l)}
+.ext-t{font-size:9px;font-weight:700;padding:2px 5px;border-radius:4px;background:rgba(0,215,185,.12);color:var(--teal)}
+.ext-t.pending{background:rgba(30,38,69,.6);color:var(--dm)}
+.c-foot{display:flex;align-items:center;gap:5px}
+.mav{width:17px;height:17px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:700;color:#fff;flex-shrink:0}
+.c-due{font-size:10px;color:var(--dm);font-variant-numeric:tabular-nums;margin-left:auto}
+.c-due.ov{color:var(--red)}
+.c-cmt{font-size:10px;color:var(--dm);display:flex;align-items:center;gap:2px}
+
+/* ─ BANDWIDTH ─ */
+#vb{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:16px}
+.s-title{font-family:'Inter Tight',sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--mu);margin-bottom:10px}
+.bw-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px}
+.bw-card{background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:15px}
+.bw-title{font-family:'Inter Tight',sans-serif;font-size:13px;font-weight:700;margin-bottom:13px;color:var(--fg2)}
+.bars{display:flex;flex-direction:column;gap:10px}
+.br{display:flex;align-items:center;gap:9px}
+.br-lbl{width:120px;font-size:11px;color:var(--mu);flex-shrink:0}
+.br-trk{flex:1;height:6px;background:var(--sf3);border-radius:3px;overflow:hidden}
+.br-fill{height:100%;border-radius:3px;transition:width .6s cubic-bezier(.16,1,.3,1)}
+.br-val{width:28px;font-family:'Inter Tight',sans-serif;font-size:12px;font-weight:600;color:var(--fg2);text-align:right;font-variant-numeric:tabular-nums}
+.notes-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.note-card{background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:15px}
+.note-title{font-family:'Inter Tight',sans-serif;font-size:13px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:7px;color:var(--fg2)}
+.note-item{font-size:12px;color:var(--mu);padding:7px 0;border-bottom:1px solid var(--bd);display:flex;align-items:flex-start;gap:7px;line-height:1.45}
+.note-item:last-child{border-bottom:none}
+
+/* ─ CLIENTS ─ */
+#vc{flex:1;overflow-y:auto;padding:16px}
+.cl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(278px,1fr));gap:12px}
+.cl-card{background:var(--sf);border:1px solid var(--bd);border-radius:14px;padding:16px;transition:transform .15s,box-shadow .15s;cursor:default}
+.cl-card:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,0,0,.4)}
+.cl-head{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.cl-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Inter Tight',sans-serif;font-size:14px;font-weight:800;color:#fff;flex-shrink:0}
+.cl-code{font-family:'Inter Tight',sans-serif;font-size:14px;font-weight:800}
+.cl-full{font-size:11px;color:var(--mu);margin-top:1px}
+.cl-sp{font-size:15px;margin-top:2px}
+.cl-ring-wrap{margin-left:auto;position:relative}
+.cl-ring-wrap .ring-label{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column}
+.ring-pct{font-family:'Inter Tight',sans-serif;font-size:13px;font-weight:800;line-height:1}
+.ring-sublabel{font-size:8px;color:var(--mu);text-transform:uppercase;letter-spacing:.06em;margin-top:1px}
+.cl-grade{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;font-family:'Inter Tight',sans-serif;font-size:11px;font-weight:800;flex-shrink:0}
+.cl-stats{display:flex;gap:0;border-top:1px solid var(--bd);padding-top:12px;margin-top:4px}
+.cl-stat{flex:1;text-align:center}
+.cl-stat-v{font-family:'Inter Tight',sans-serif;font-size:22px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1}
+.cl-stat-l{font-size:9.5px;color:var(--mu);text-transform:uppercase;letter-spacing:.06em;margin-top:3px}
+.cl-stat+.cl-stat{border-left:1px solid var(--bd)}
+.cl-bar{height:3px;background:var(--sf3);border-radius:2px;margin:10px 0;overflow:hidden}
+.cl-bar-fill{height:100%;border-radius:2px;transition:width .8s cubic-bezier(.16,1,.3,1)}
+
+/* ─ FIGMA PANEL ─ */
+#vf{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:14px}
+.fig-note{font-size:11px;color:var(--mu);background:rgba(59,59,245,.06);border:1px solid rgba(59,59,245,.18);border-radius:8px;padding:9px 13px;line-height:1.6}
+.fig-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:10px}
+.fig-card{background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px;transition:transform .14s}
+.fig-card:hover{transform:translateY(-1px)}
+.fig-card-head{display:flex;align-items:center;gap:10px}
+.fig-brand-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Inter Tight',sans-serif;font-size:13px;font-weight:800;color:#fff;flex-shrink:0}
+.fig-brand-name{font-family:'Inter Tight',sans-serif;font-size:13px;font-weight:700}
+.fig-brand-sub{font-size:10px;color:var(--mu)}
+.fig-link{display:flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;color:var(--acc-l);text-decoration:none;background:rgba(59,59,245,.08);border:1px solid rgba(59,59,245,.2);border-radius:7px;padding:7px 11px;transition:background .12s}
+.fig-link:hover{background:rgba(59,59,245,.16)}
+.fig-status{display:flex;align-items:center;gap:7px;font-size:11px;padding-top:7px;border-top:1px solid var(--bd)}
+.fig-status-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.fig-last{font-size:9.5px;color:var(--dm);margin-left:auto;white-space:nowrap}
+.skill-callout{background:rgba(0,215,185,.06);border:1px solid rgba(0,215,185,.2);border-radius:12px;padding:14px 16px;display:flex;align-items:flex-start;gap:12px}
+.skill-callout h3{font-family:'Inter Tight',sans-serif;font-size:14px;font-weight:700;color:var(--teal);margin-bottom:4px}
+.skill-callout p{font-size:11.5px;color:var(--mu);line-height:1.55}
+.skill-callout code{font-size:11px;background:var(--sf2);border-radius:4px;padding:1px 5px;color:var(--fg)}
+
+/* ─ SATISFACTION PANEL ─ */
+#vs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:14px}
+.sat-hero{background:linear-gradient(135deg,rgba(0,0,160,.2) 0%,rgba(0,215,185,.1) 100%);border:1px solid var(--bd);border-radius:16px;padding:20px;display:flex;align-items:center;gap:20px}
+.sat-score-ring{position:relative;flex-shrink:0}
+.sat-score-label{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.sat-score-n{font-family:'Inter Tight',sans-serif;font-size:22px;font-weight:800;line-height:1}
+.sat-score-sub{font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--mu);margin-top:2px}
+.sat-hero-info{flex:1}
+.sat-hero-title{font-family:'Inter Tight',sans-serif;font-size:18px;font-weight:800;margin-bottom:4px}
+.sat-hero-sub{font-size:11.5px;color:var(--mu);line-height:1.5;margin-bottom:12px}
+.sat-kpi-row{display:flex;gap:16px;flex-wrap:wrap}
+.sat-kpi{text-align:center}
+.sat-kpi-v{font-family:'Inter Tight',sans-serif;font-size:20px;font-weight:800;line-height:1}
+.sat-kpi-l{font-size:9px;color:var(--mu);text-transform:uppercase;letter-spacing:.06em;margin-top:2px}
+
+.sat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+.sat-card{background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:15px}
+.sat-card-title{font-family:'Inter Tight',sans-serif;font-size:13px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px;color:var(--fg2)}
+.sat-card-title .sat-ico{font-size:16px}
+.process-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--bd)}
+.process-row:last-child{border-bottom:none}
+.process-name{font-size:11.5px;font-weight:600;flex:1}
+.process-bar-wrap{flex:2;height:6px;background:var(--sf3);border-radius:3px;overflow:hidden}
+.process-bar-fill{height:100%;border-radius:3px;transition:width .7s cubic-bezier(.16,1,.3,1)}
+.process-pct{font-family:'Inter Tight',sans-serif;font-size:12px;font-weight:700;width:36px;text-align:right;font-variant-numeric:tabular-nums}
+.process-badge{font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;white-space:nowrap}
+.sat-comment{display:flex;gap:8px;padding:8px 0;border-bottom:1px solid var(--bd);align-items:flex-start}
+.sat-comment:last-child{border-bottom:none}
+.sat-comment-sent{width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:1px}
+.sat-comment-sent.pos{background:rgba(0,215,185,.15);color:var(--teal)}
+.sat-comment-sent.neg{background:rgba(232,50,74,.12);color:var(--red)}
+.sat-comment-sent.neu{background:rgba(74,88,128,.2);color:var(--mu)}
+.sat-comment-text{font-size:11px;color:var(--mu);line-height:1.5;flex:1}
+.sat-comment-brand{font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;margin-top:2px;display:inline-block}
+.sat-comment-meta{font-size:9px;color:var(--dm);margin-top:1px}
+
+.brand-sat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px}
+.brand-sat-card{background:var(--sf);border:1px solid var(--bd);border-radius:10px;padding:12px;display:flex;align-items:center;gap:10px}
+.brand-sat-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.brand-sat-info{flex:1;min-width:0}
+.brand-sat-name{font-family:'Inter Tight',sans-serif;font-size:12px;font-weight:700}
+.brand-sat-score{font-family:'Inter Tight',sans-serif;font-size:18px;font-weight:800;line-height:1}
+.brand-sat-sub{font-size:9px;color:var(--mu);margin-top:1px}
+.brand-sat-bar{height:3px;background:var(--sf3);border-radius:2px;margin-top:6px;overflow:hidden}
+.brand-sat-fill{height:100%;border-radius:2px;transition:width .8s cubic-bezier(.16,1,.3,1)}
+.sat-feed-note{font-size:10.5px;color:var(--mu);background:rgba(0,215,185,.04);border:1px solid rgba(0,215,185,.14);border-radius:8px;padding:9px 13px;line-height:1.6}
+
+/* ─ ANIMATION & SHARED ─ */
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.card{animation:fadeUp .2s ease both}
+.cl-card{animation:fadeUp .25s ease both}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--dm);border-radius:2px}
+</style>
+
+<!-- Mars M logo paths inlined — avoids symbol/use rendering artifacts -->
+<!-- Left half: M0 0→7 10→14 0→14 18 inner-notch→0 18 (cobalt) -->
+<!-- Right half: M14 0→21 10→28 0→28 18 inner-notch→14 18 (teal) -->
+
+<div class="app">
+
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <div class="lockup">
+      <div>
+        <span class="brand-name">MARS WITHIN</span>
+        <span class="brand-sub"><span class="pulse"></span>effem.com · 7 brands</span>
+      </div>
+    </div>
+    <div class="chips" id="stat-chips"></div>
+    <div class="topbar-right">
+      <div class="refresh-wrap">
+        <button class="refresh-btn" id="refresh-btn" onclick="doRefresh()"><span class="ri">↺</span> Refresh</button>
+        <div class="last-sync" id="last-sync">Never synced</div>
+      </div>
+      <div class="tabs">
+        <button class="tab on"  onclick="setView('vk',this)">Kanban</button>
+        <button class="tab"     onclick="setView('vb',this)">Bandwidth</button>
+        <button class="tab"     onclick="setView('vc',this)">Clients</button>
+        <button class="tab"     onclick="setView('vf',this)">Figma</button>
+        <button class="tab"     onclick="setView('vs',this)">Satisfaction</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div>
+      <div class="g-lbl">Brands</div>
+      <div class="pill-list" id="brand-nav"></div>
+    </div>
+    <div>
+      <div class="g-lbl">Type</div>
+      <div class="pill-list" id="type-nav"></div>
+    </div>
+    <div>
+      <div class="g-lbl">Team</div>
+      <div id="team-list"></div>
+    </div>
+    <div>
+      <div class="g-lbl">Skill</div>
+      <div class="skill-pill" onclick="setView('vf',document.querySelectorAll('.tab')[3])" role="button">
+        <span class="sk-ico">✏️</span>
+        <div><div class="sk-name">figma-note-updated</div><div class="sk-sub">Auto-comment when edits addressed</div></div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- KANBAN -->
+    <div id="vk">
+      <div id="today-banner" class="today-banner"></div>
+      <div class="k-scroll"><div class="k-track" id="kanban-track"></div></div>
+    </div>
+
+    <!-- BANDWIDTH -->
+    <div id="vb" hidden>
+      <div><div class="s-title">Workload by person</div><div class="bw-grid" id="bw-people"></div></div>
+      <div><div class="s-title">Tasks by brand</div><div class="bw-grid" id="bw-brands"></div></div>
+      <div><div class="s-title">Wins &amp; flags</div><div class="notes-grid" id="notes-grid"></div></div>
+    </div>
+
+    <!-- CLIENTS -->
+    <div id="vc" hidden><div class="cl-grid" id="cl-grid"></div></div>
+
+    <!-- FIGMA -->
+    <div id="vf" hidden>
+      <div class="skill-callout">
+        <span style="font-size:28px;flex-shrink:0;margin-top:2px">✏️</span>
+        <div>
+          <h3>figma-note-updated</h3>
+          <p>Once all edits are addressed, trigger this skill to auto-post a completion comment. In Claude Code, type <code>/figma-note-updated</code> or say <em>"mark this Figma frame as edit-complete."</em> Created 2026-10-15.</p>
+        </div>
+      </div>
+      <div class="fig-note">⚠ Real-time Figma change detection requires the GitHub Actions pipeline. Until then, open each brand file manually — the tracker logs your last visit per brand.</div>
+      <div class="fig-grid" id="fig-grid"></div>
+    </div>
+
+    <!-- SATISFACTION -->
+    <div id="vs" hidden>
+      <div class="sat-feed-note">📊 Metrics are calculated from Asana task data — delivery rates, comment counts, and review cycles update automatically when the GitHub Actions sync runs. Comment sentiment feed ingests positive and negative notes from all task comments across Copy, Design, and Development processes.</div>
+      <div class="sat-hero" id="sat-hero"></div>
+      <div class="sat-grid" id="sat-grid"></div>
+      <div>
+        <div class="s-title">Brand satisfaction</div>
+        <div class="brand-sat-grid" id="brand-sat-grid"></div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+// ─── DATA ─────────────────────────────────────────────────────────────────
+const TODAY = new Date('2026-10-16');
+
+const BRANDS = {
+  CSR:{name:'Caesar',      color:'#4F85F8',bg:'#0D1835',figma:'https://www.figma.com/design/7829p2Vc0tc1dPbURvDxKg/Cesar',    species:'dog'},
+  GRN:{name:'Greenies',    color:'#3FBB68',bg:'#081E10',figma:'https://www.figma.com/design/7rv9vvbCppBRbOjqv42NQi/Greenies', species:'both'},
+  IAM:{name:'IAMS',        color:'#FF7A52',bg:'#200D08',figma:'https://www.figma.com/design/j5Bwm3Fh92lSMwzNCEpENl/IAMS',    species:'both'},
+  PED:{name:'Pedigree',    color:'#E85560',bg:'#1E080C',figma:'https://www.figma.com/design/83jRSwFotHEfLxe2hW8XIi/Pedigree', species:'dog'},
+  NTR:{name:'Nutro',       color:'#C49B6C',bg:'#1A1208',figma:'https://www.figma.com/design/ldJ9lfOZmuNPXGDIlOgPFd/Nutro',   species:'both'},
+  SHB:{name:'Sheba',       color:'#AB7DFF',bg:'#130B28',figma:'https://www.figma.com/design/XrojRNZEyKpTcPHus19tpo/Sheba',   species:'cat'},
+  TEM:{name:'Temptations', color:'#F5A823',bg:'#1E1408',figma:'https://www.figma.com/design/Qmwptrww20wGCOVj854bEU/Temptations?node-id=2316-2', species:'cat'},
+};
+
+const STAGES = [
+  {id:'with-copy', label:'With Copy',        color:'#4F85F8'},
+  {id:'design',    label:'Design',            color:'#AB7DFF'},
+  {id:'waiting',   label:'Waiting for Copy',  color:'#D4962A'},
+  {id:'inprocess', label:'In Process',        color:'#3FBB68'},
+  {id:'final',     label:'Final Steps',       color:'#FF7A52'},
+  {id:'delivered', label:'Delivered',         color:'#00D7B9'},
+];
+
+const PEOPLE = {
+  LM:{name:'Lucia Mora',    initials:'LM',color:'#AB7DFF'},
+  KM:{name:'Karan Matlani', initials:'KM',color:'#4F85F8'},
+  RI:{name:'Rina',          initials:'RI',color:'#FF7A52'},
+  NI:{name:'Nico',          initials:'NI',color:'#3FBB68'},
+  CA:{name:'Carla',         initials:'CA',color:'#00D7B9'},
+  MA:{name:'Manuel',        initials:'MA',color:'#F5A623'},
+  LE:{name:'Leo',           initials:'LE',color:'#E85560'},
+  AN:{name:'Andrea',        initials:'AN',color:'#C49B6C'},
+  EM:{name:'Emily',         initials:'EM',color:'#4F85F8'},
+  CY:{name:'Carly',         initials:'CY',color:'#D4962A'},
+};
+
+function sp(task) {
+  const n = task.name;
+  if (n.includes('_Cat')||n.includes('Cat_')) return 'cat';
+  if (n.includes('_Dog')||n.includes('Dog_')) return 'dog';
+  return BRANDS[task.brand].species;
+}
+// 🐾 replaced with 🐈🐕 for multi-species brands (GRN, NTR, IAM)
+const SP = {cat:'🐱',dog:'🐶',both:'🐈🐕'};
+
+const TASKS = [
+  {id:1, name:'SHB_Birthday_T2',              brand:'SHB',stage:'with-copy', type:'Birthday',  who:'LM',due:'2026-10-20',cmt:2},
+  {id:2, name:'2026_PED_Birthday_T2',         brand:'PED',stage:'with-copy', type:'Birthday',  who:'KM',due:'2026-10-22',cmt:1},
+  {id:3, name:'Sheba T3',                     brand:'SHB',stage:'waiting',   type:'General',   who:'LM',due:'2026-10-25',cmt:0},
+  {id:4, name:'2026_GRN_T3_Cat',              brand:'GRN',stage:'waiting',   type:'General',   who:'LM',due:'2026-10-28',cmt:3},
+  {id:5, name:'2026_GRN_T2_Cat',              brand:'GRN',stage:'waiting',   type:'General',   who:'LM',due:'2026-10-30',cmt:1},
+  {id:6, name:'2026_GRN_T1_Cat',              brand:'GRN',stage:'waiting',   type:'General',   who:'LM',due:'2026-11-01',cmt:0},
+  {id:7, name:'TEM_Birthday_T3',              brand:'TEM',stage:'waiting',   type:'Birthday',  who:'LM',due:'2026-10-27',cmt:2},
+  {id:8, name:'TEM_Birthday_T2',              brand:'TEM',stage:'waiting',   type:'Birthday',  who:'LM',due:'2026-10-29',cmt:0},
+  {id:9, name:'TEM_Birthday_T1',              brand:'TEM',stage:'waiting',   type:'Birthday',  who:'LM',due:'2026-10-31',cmt:1},
+  {id:10,name:'2026_PED_Birthday_T3',         brand:'PED',stage:'waiting',   type:'Birthday',  who:'KM',due:'2026-10-24',cmt:0},
+  {id:11,name:'2026_PED_Birthday_T1',         brand:'PED',stage:'waiting',   type:'Birthday',  who:'KM',due:'2026-11-03',cmt:2},
+  {id:12,name:'2026_IAM_Enrichment_T1_Cat',   brand:'IAM',stage:'design',    type:'Enrichment',who:'LM',due:'2026-10-14',cmt:1,ss:'Edits'},
+  {id:13,name:'2026_IAM_Enrichment_T2a_Cat',  brand:'IAM',stage:'design',    type:'Enrichment',who:'LM',due:'2026-10-15',cmt:0,ss:'Packaging'},
+  {id:14,name:'2026_GRN_Enrichment_T1',       brand:'GRN',stage:'final',     type:'Enrichment',who:'LM',due:'2026-10-16',cmt:3,ss:'Edits'},
+  {id:15,name:'2026_SHB_Enrichment_T1',       brand:'SHB',stage:'final',     type:'Enrichment',who:'LM',due:'2026-10-19',cmt:1,ss:'Edits'},
+  {id:16,name:'2026_CSR_Enrichment_T1',       brand:'CSR',stage:'delivered', type:'Enrichment',who:'LM',due:'2026-10-01',int:1,ext:1},
+  {id:17,name:'2026_CSR_Enrichment_T2a-b',    brand:'CSR',stage:'delivered', type:'Enrichment',who:'LM',due:'2026-10-05',int:1,ext:1},
+  {id:18,name:'2026_GRN_Enrichment_T1',       brand:'GRN',stage:'delivered', type:'Enrichment',who:'LM',due:'2026-10-03',int:1,ext:1},
+  {id:19,name:'2026_GRN_Enrichment_T2a-b',    brand:'GRN',stage:'delivered', type:'Enrichment',who:'LM',due:'2026-10-07',int:1,ext:0},
+  {id:20,name:'2026_IAM_Enrichment_T1_Dog',   brand:'IAM',stage:'delivered', type:'Enrichment',who:'LM',due:'2026-10-08',int:1,ext:1},
+  {id:21,name:'2026_IAM_Enrichment_T2a-b_Dog',brand:'IAM',stage:'delivered', type:'Enrichment',who:'LM',due:'2026-10-10',int:1,ext:1},
+  {id:22,name:'2026_IAM_Enrichment_T2a-b_Cat',brand:'IAM',stage:'delivered', type:'Enrichment',who:'LM',due:'2026-10-12',int:1,ext:0},
+  {id:23,name:'2026_PED_Enrichment_T1',       brand:'PED',stage:'delivered', type:'Enrichment',who:'KM',due:'2026-10-06',int:1,ext:1},
+  {id:24,name:'2026_PED_Enrichment_T2a-b',    brand:'PED',stage:'delivered', type:'Enrichment',who:'KM',due:'2026-10-09',int:1,ext:1},
+  {id:25,name:'2026_NTR_Enrichment_T1',       brand:'NTR',stage:'delivered', type:'Enrichment',who:'LM',due:'2026-10-04',int:1,ext:1},
+  {id:26,name:'2026_NTR_Enrichment_T2a-b',    brand:'NTR',stage:'delivered', type:'Enrichment',who:'LM',due:'2026-10-08',int:1,ext:1},
+  {id:27,name:'2026_SHB_Enrichment_T2a-b',    brand:'SHB',stage:'delivered', type:'Enrichment',who:'LM',due:'2026-10-14',int:0,ext:0},
+  {id:28,name:'2026_TEM_Enrichment_T1',       brand:'TEM',stage:'delivered', type:'Enrichment',who:'LM',due:'2026-10-02',int:1,ext:1},
+  {id:29,name:'2026_TEM_Enrichment_T2a-b',    brand:'TEM',stage:'delivered', type:'Enrichment',who:'LM',due:'2026-10-12',int:1,ext:0},
+];
+
+// Simulated comment sentiment feed — in production this comes from Asana task comments via sync script
+const COMMENT_FEED = [
+  {brand:'CSR',text:'Design looks great — approved! Clean, on-brand.',sent:'pos',who:'Brand Team',date:'Oct 15'},
+  {brand:'IAM',text:'T1 Cat needs revision on the color contrast for accessibility.',sent:'neg',who:'Reviewer',date:'Oct 14'},
+  {brand:'GRN',text:'Enrichment T1 approved for final production. Good work!',sent:'pos',who:'Client',date:'Oct 13'},
+  {brand:'PED',text:'Birthday T2 package — approved with minor edits on CTA copy.',sent:'pos',who:'Brand Team',date:'Oct 12'},
+  {brand:'SHB',text:'T2a-b INT delivery still pending. Need update on timeline.',sent:'neg',who:'PM',date:'Oct 12'},
+  {brand:'TEM',text:'Enrichment T2a-b EXT delivery overdue — awaiting confirmation.',sent:'neg',who:'Client',date:'Oct 11'},
+  {brand:'NTR',text:'Enrichment fully cleared INT and EXT. Great delivery!',sent:'pos',who:'Client',date:'Oct 10'},
+  {brand:'IAM',text:'Dog T1 + T2a-b both cleared — smooth process this cycle.',sent:'pos',who:'Brand Team',date:'Oct 9'},
+];
+
+// ─── STATE ────────────────────────────────────────────────────────────────
+let activeBrand='ALL', activeType='ALL';
+const filtered=()=>TASKS.filter(t=>(activeBrand==='ALL'||t.brand===activeBrand)&&(activeType==='ALL'||t.type===activeType));
+const isOv=(d)=>d&&new Date(d)<TODAY;
+const fmtD=(d)=>d?new Date(d).toLocaleDateString('en-US',{month:'short',day:'numeric'}):'';
+const fmtDT=(ts)=>{if(!ts)return'—';const d=new Date(ts);return d.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' · '+d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});};
+const el=(tag,cls,html='')=>{const e=document.createElement(tag);if(cls)e.className=cls;if(html)e.innerHTML=html;return e;};
+
+// Stage category helpers
+const COPY_STAGES   = ['with-copy','waiting'];
+const DESIGN_STAGES = ['design'];
+const DEV_STAGES    = ['inprocess','final'];
+
+// ─── PROGRESS RING SVG ───────────────────────────────────────────────────
+function ring(pct, color, size=60) {
+  const r = size/2 - 6, c = 2*Math.PI*r;
+  const off = c*(1-Math.max(0,Math.min(100,pct))/100);
+  return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" style="display:block">
+    <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="5"/>
+    <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${color}" stroke-width="5"
+      stroke-dasharray="${c.toFixed(1)}" stroke-dashoffset="${c.toFixed(1)}"
+      stroke-linecap="round" transform="rotate(-90 ${size/2} ${size/2})"
+      class="ring-anim" data-target="${off.toFixed(1)}"/>
+  </svg>`;
+}
+
+function animateRings() {
+  document.querySelectorAll('.ring-anim').forEach(el => {
+    const target = parseFloat(el.dataset.target);
+    el.style.transition = 'stroke-dashoffset 1s cubic-bezier(.16,1,.3,1)';
+    requestAnimationFrame(() => requestAnimationFrame(() => el.style.strokeDashoffset = target));
+  });
+}
+
+function gradeFromPct(pct) {
+  if (pct>=90) return {g:'A+',c:'#00D7B9',bg:'rgba(0,215,185,.15)'};
+  if (pct>=75) return {g:'A', c:'#3FBB68',bg:'rgba(63,187,104,.15)'};
+  if (pct>=60) return {g:'B', c:'#4F85F8',bg:'rgba(79,133,248,.15)'};
+  if (pct>=45) return {g:'C', c:'#F5A823',bg:'rgba(245,168,35,.15)'};
+  return           {g:'D', c:'#E85560',bg:'rgba(232,85,96,.15)'};
+}
+
+// ─── REFRESH ─────────────────────────────────────────────────────────────
+function loadSyncTime(){try{const ts=localStorage.getItem('mars-sync');document.getElementById('last-sync').textContent=ts?'Synced '+fmtDT(+ts):'Never synced';}catch(e){}}
+function doRefresh(){
+  const btn=document.getElementById('refresh-btn');btn.classList.add('spinning');btn.disabled=true;
+  setTimeout(()=>{
+    const now=Date.now();try{localStorage.setItem('mars-sync',now);}catch(e){}
+    document.getElementById('last-sync').textContent='Synced '+fmtDT(now);
+    btn.classList.remove('spinning');btn.disabled=false;renderFigmaGrid();
+  },900);
+}
+
+// ─── STATS BAR ───────────────────────────────────────────────────────────
+function renderStats(){
+  const a=TASKS.filter(t=>t.stage!=='delivered').length;
+  const o=TASKS.filter(t=>t.stage!=='delivered'&&isOv(t.due)).length;
+  const f=TASKS.filter(t=>t.stage==='final').length;
+  const d=TASKS.filter(t=>t.stage==='delivered').length;
+  const pct=Math.round(d/TASKS.length*100);
+  document.getElementById('stat-chips').innerHTML=`
+    <div class="chip acc"><div class="chip-inner"><span class="chip-n">${a}</span><span class="chip-l">Active</span></div></div>
+    <div class="chip danger"><div class="chip-inner"><span class="chip-n">${o}</span><span class="chip-l">Overdue</span></div></div>
+    <div class="chip warn"><div class="chip-inner"><span class="chip-n">${f}</span><span class="chip-l">Final Steps</span></div></div>
+    <div class="chip ok"><div class="chip-inner"><span class="chip-n">${pct}%</span><span class="chip-l">Delivered</span></div></div>`;
+}
+
+// ─── TODAY BANNER — overdue broken out by process ─────────────────────────
+function renderToday(){
+  const banner=document.getElementById('today-banner');
+  const active=TASKS.filter(t=>t.stage!=='delivered');
+  const ovAll=active.filter(t=>isOv(t.due));
+  if(!ovAll.length){banner.hidden=true;return;}
+  banner.hidden=false;
+
+  const ovCopy   = ovAll.filter(t=>COPY_STAGES.includes(t.stage));
+  const ovDesign = ovAll.filter(t=>DESIGN_STAGES.includes(t.stage));
+  const ovDev    = ovAll.filter(t=>DEV_STAGES.includes(t.stage));
+
+  function groupHtml(items, cls, label) {
+    if(!items.length) return '';
+    const chips = items.map(t=>`<span class="urg-chip">⚠ ${t.name}</span>`).join('');
+    return `<div class="ov-group"><span class="ov-group-lbl ${cls}">${label} (${items.length})</span>${chips}</div>`;
+  }
+
+  banner.innerHTML=`
+    <span class="today-label">🔴 Overdue</span>
+    <div class="overdue-groups">
+      ${groupHtml(ovCopy,'copy','Copy')}
+      ${groupHtml(ovDesign,'design','Design')}
+      ${groupHtml(ovDev,'dev','Dev')}
+    </div>`;
+}
+
+// ─── SIDEBAR ─────────────────────────────────────────────────────────────
+function renderSidebar(){
+  const bn=document.getElementById('brand-nav');bn.innerHTML='';
+  const bc={};TASKS.forEach(t=>bc[t.brand]=(bc[t.brand]||0)+1);
+  [['ALL','All Brands','#526080',TASKS.length,null],...Object.entries(BRANDS).map(([k,v])=>[k,v.name,v.color,bc[k]||0,v.species])]
+    .forEach(([code,name,color,count,species])=>{
+      const b=el('button','pill'+(code===activeBrand?' on':''));
+      const spIcon=species?`<span class="sp-icon">${SP[species]}</span>`:'';
+      b.innerHTML=`<span class="pdot" style="background:${color}"></span><span class="pn">${name}</span>${spIcon}<span class="pc">${count}</span>`;
+      b.onclick=()=>{activeBrand=code;render();};bn.appendChild(b);
+    });
+  const tn=document.getElementById('type-nav');tn.innerHTML='';
+  ['ALL','Enrichment','Birthday','General'].forEach(t=>{
+    const count=t==='ALL'?TASKS.length:TASKS.filter(x=>x.type===t).length;
+    const b=el('button','pill'+(t===activeType?' on':''));
+    b.innerHTML=`<span class="pn">${t==='ALL'?'All Types':t}</span><span class="pc">${count}</span>`;
+    b.onclick=()=>{activeType=t;render();};tn.appendChild(b);
+  });
+  const tl=document.getElementById('team-list');tl.innerHTML='';
+  const tg=el('div','team-grid');
+  Object.entries(PEOPLE).forEach(([k,p])=>{
+    const c=TASKS.filter(t=>t.who===k&&t.stage!=='delivered').length;
+    const w=el('div','team-av-wrap');
+    w.title=`${p.name}${c?' · '+c+' active':''}`;
+    w.innerHTML=`<div class="person-av" style="background:${p.color};${c?'box-shadow:0 0 0 2px rgba(255,255,255,.15)':''}">${p.initials}</div><span class="team-av-name">${p.name.split(' ')[0]}</span>`;
+    tg.appendChild(w);
+  });
+  tl.appendChild(tg);
+}
+
+// ─── KANBAN ──────────────────────────────────────────────────────────────
+function renderCard(task, delay=0){
+  const b=BRANDS[task.brand],p=PEOPLE[task.who]||{initials:task.who||'?',color:'#4A5880'};
+  const ov=task.stage!=='delivered'&&isOv(task.due);
+  const species=sp(task);
+  const card=el('div','card');
+  card.style.borderLeftColor=b.color;
+  card.style.animationDelay=delay+'ms';
+  if(ov) card.style.boxShadow='inset 0 0 0 1px rgba(232,50,74,.3)';
+  let tags=`<span class="b-tag" style="background:${b.bg};color:${b.color}">${task.brand}</span>`;
+  tags+=`<span class="sp-tag">${SP[species]}</span>`;
+  tags+=`<span class="t-tag">${task.type}</span>`;
+  if(task.ss)tags+=`<span class="ss-tag">${task.ss}</span>`;
+  if(ov) tags+=`<span style="font-size:9px;font-weight:700;padding:2px 5px;border-radius:4px;background:rgba(232,50,74,.15);color:var(--red)">OVERDUE</span>`;
+  if(task.stage==='delivered')tags+=`<span class="int-t">INT</span><span class="ext-t${task.ext?'':' pending'}">${task.ext?'EXT':'EXT pend.'}</span>`;
+  let foot=`<div class="mav" style="background:${p.color}">${p.initials}</div>`;
+  if(task.cmt)foot+=`<span class="c-cmt">💬 ${task.cmt}</span>`;
+  if(task.due)foot+=`<span class="c-due${ov?' ov':''}">${ov?'⚠ ':''}${fmtD(task.due)}</span>`;
+  card.innerHTML=`<div class="c-name">${task.name}</div><div class="c-tags">${tags}</div><div class="c-foot">${foot}</div>`;
+  return card;
+}
+
+function renderKanban(){
+  const track=document.getElementById('kanban-track');track.innerHTML='';
+  const tasks=filtered();
+  STAGES.forEach(stage=>{
+    const st=tasks.filter(t=>t.stage===stage.id);
+    const col=el('div','col');
+    const head=el('div','col-h');
+    head.style.borderBottomColor=stage.color;
+    const ovCount=st.filter(t=>isOv(t.due)).length;
+    const ovBadge=ovCount?` <span style="font-size:9px;font-weight:700;padding:1px 5px;border-radius:4px;background:rgba(232,50,74,.15);color:var(--red)">⚠${ovCount}</span>`:'';
+    head.innerHTML=`<div style="width:8px;height:8px;border-radius:50%;background:${stage.color};flex-shrink:0"></div><span class="col-h-lbl" style="color:${stage.color}">${stage.label}</span><span class="col-h-n">${st.length}</span>${ovBadge}`;
+    const body=el('div','col-b');
+    if(!st.length)body.appendChild(el('div','empty-col','—'));
+    else st.forEach((t,i)=>body.appendChild(renderCard(t,i*30)));
+    col.appendChild(head);col.appendChild(body);track.appendChild(col);
+  });
+}
+
+// ─── BANDWIDTH ───────────────────────────────────────────────────────────
+function renderBandwidth(){
+  const active=TASKS.filter(t=>t.stage!=='delivered');
+  const maxP=Math.max(1,...Object.keys(PEOPLE).map(k=>active.filter(t=>t.who===k).length));
+  const pg=document.getElementById('bw-people');pg.innerHTML='';
+
+  const pwC=el('div','bw-card');pwC.innerHTML=`<div class="bw-title">Active tasks by designer</div><div class="bars" id="pbars"></div>`;pg.appendChild(pwC);
+  Object.entries(PEOPLE).forEach(([k,p])=>{const cnt=active.filter(t=>t.who===k).length;const r=el('div','br');r.innerHTML=`<span class="br-lbl">${p.name}</span><div class="br-trk"><div class="br-fill" style="width:0%;background:${p.color}" data-w="${cnt/maxP*100}"></div></div><span class="br-val">${cnt}</span>`;pwC.querySelector('#pbars').appendChild(r);});
+
+  const maxS=Math.max(1,...STAGES.map(s=>active.filter(t=>t.stage===s.id).length));
+  const stC=el('div','bw-card');stC.innerHTML=`<div class="bw-title">Distribution by stage</div><div class="bars" id="sbars"></div>`;pg.appendChild(stC);
+  STAGES.filter(s=>s.id!=='delivered').forEach(s=>{const cnt=active.filter(t=>t.stage===s.id).length;const r=el('div','br');r.innerHTML=`<span class="br-lbl">${s.label}</span><div class="br-trk"><div class="br-fill" style="width:0%;background:${s.color}" data-w="${cnt/maxS*100}"></div></div><span class="br-val">${cnt}</span>`;stC.querySelector('#sbars').appendChild(r);});
+
+  const bg=document.getElementById('bw-brands');bg.innerHTML='';
+  const maxB=Math.max(1,...Object.keys(BRANDS).map(k=>TASKS.filter(t=>t.brand===k).length));
+  const bC=el('div','bw-card');bC.innerHTML=`<div class="bw-title">Total tasks by brand</div><div class="bars" id="bbars"></div>`;bg.appendChild(bC);
+  Object.entries(BRANDS).forEach(([k,v])=>{const cnt=TASKS.filter(t=>t.brand===k).length;const act=TASKS.filter(t=>t.brand===k&&t.stage!=='delivered').length;const r=el('div','br');r.innerHTML=`<span class="br-lbl">${SP[v.species]} ${v.name}</span><div class="br-trk"><div class="br-fill" style="width:0%;background:${v.color}" data-w="${cnt/maxB*100}"></div></div><span class="br-val">${act}</span>`;bC.querySelector('#bbars').appendChild(r);});
+
+  const ng=document.getElementById('notes-grid');ng.innerHTML='';
+  const wins=[{mark:'✅',text:'Enrichment wave delivered across all 7 brands'},{mark:'✅',text:'IAM Cat T1 + T2a external delivery confirmed'},{mark:'✅',text:'NTR + CSR Enrichment cleared INT and EXT'},{mark:'✅',text:'14 of 29 campaigns at Delivered stage'}];
+  const flags=[{mark:'⚠️',text:'GRN + IAM Cat T2a-b — EXT delivery pending'},{mark:'⚠️',text:'SHB Enrichment T2a-b — both INT and EXT pending'},{mark:'⚠️',text:'TEM Enrichment T2a-b — EXT still pending'},{mark:'🔴',text:'IAM Design tasks T1+T2a overdue in Design stage'}];
+  const wC=el('div','note-card');wC.innerHTML=`<div class="note-title"><span>🏆</span> Wins this cycle</div>`;wins.forEach(w=>{const i=el('div','note-item');i.innerHTML=`<span>${w.mark}</span><span>${w.text}</span>`;wC.appendChild(i);});
+  const fC=el('div','note-card');fC.innerHTML=`<div class="note-title"><span>🚩</span> Flags &amp; blockers</div>`;flags.forEach(f=>{const i=el('div','note-item');i.innerHTML=`<span>${f.mark}</span><span>${f.text}</span>`;fC.appendChild(i);});
+  ng.appendChild(wC);ng.appendChild(fC);
+
+  setTimeout(()=>{document.querySelectorAll('.br-fill[data-w]').forEach(el=>{el.style.width=el.dataset.w+'%';});},50);
+}
+
+// ─── CLIENTS ─────────────────────────────────────────────────────────────
+function renderClients(){
+  const grid=document.getElementById('cl-grid');grid.innerHTML='';
+  Object.entries(BRANDS).forEach(([code,brand],i)=>{
+    const bt=TASKS.filter(t=>t.brand===code);
+    const a=bt.filter(t=>t.stage!=='delivered').length;
+    const d=bt.filter(t=>t.stage==='delivered').length;
+    const o=bt.filter(t=>t.stage!=='delivered'&&isOv(t.due)).length;
+    const pct=bt.length?Math.round(d/bt.length*100):0;
+    const gr=gradeFromPct(pct);
+    const card=el('div','cl-card');
+    card.style.animationDelay=(i*40)+'ms';
+    card.style.borderTopColor=brand.color;
+    card.style.borderTopWidth='2px';
+    card.innerHTML=`
+      <div class="cl-head">
+        <div class="cl-icon" style="background:${brand.color}">${SP[brand.species]}</div>
+        <div>
+          <div class="cl-code" style="color:${brand.color}">${code}</div>
+          <div class="cl-full">${brand.name}</div>
+        </div>
+        <div style="margin-left:auto;text-align:center">
+          <div class="cl-ring-wrap">
+            ${ring(pct, brand.color, 64)}
+            <div class="ring-label">
+              <span class="ring-pct" style="color:${brand.color}">${pct}%</span>
+              <span class="ring-sublabel">done</span>
+            </div>
+          </div>
+        </div>
+        <div class="cl-grade" style="color:${gr.c};background:${gr.bg}">${gr.g}</div>
+      </div>
+      <div class="cl-bar"><div class="cl-bar-fill" style="background:${brand.color};width:0%" data-w="${pct}"></div></div>
+      <div class="cl-stats">
+        <div class="cl-stat"><div class="cl-stat-v" style="color:${brand.color}">${a}</div><div class="cl-stat-l">Active</div></div>
+        <div class="cl-stat"><div class="cl-stat-v" style="color:#00D7B9">${d}</div><div class="cl-stat-l">Delivered</div></div>
+        <div class="cl-stat"><div class="cl-stat-v" style="color:${o?'#E85560':'#232D50'}">${o}</div><div class="cl-stat-l">Overdue</div></div>
+      </div>`;
+    grid.appendChild(card);
+  });
+  setTimeout(()=>{
+    document.querySelectorAll('.cl-bar-fill[data-w]').forEach(el=>el.style.width=el.dataset.w+'%');
+    animateRings();
+  },80);
+}
+
+// ─── FIGMA PANEL ─────────────────────────────────────────────────────────
+function recordOpen(code){try{localStorage.setItem('mars-figma-'+code,Date.now());}catch(e){}setTimeout(renderFigmaGrid,80);}
+function renderFigmaGrid(){
+  const grid=document.getElementById('fig-grid');if(!grid)return;grid.innerHTML='';
+  Object.entries(BRANDS).forEach(([code,brand])=>{
+    let ts=null;try{ts=localStorage.getItem('mars-figma-'+code);}catch(e){}
+    const at=TASKS.filter(t=>t.brand===code&&t.stage!=='delivered').length;
+    const ov=TASKS.filter(t=>t.brand===code&&t.stage!=='delivered'&&isOv(t.due)).length>0;
+    const dot=ov?'#E85560':at>0?brand.color:'#00D7B9';
+    const status=ov?`<span style="color:#E85560">⚠ Overdue</span>`:at>0?`${at} active`:`<span style="color:#00D7B9">✓ Clear</span>`;
+    const card=el('div','fig-card');
+    card.innerHTML=`
+      <div class="fig-card-head">
+        <div class="fig-brand-icon" style="background:${brand.color}">${SP[brand.species]}</div>
+        <div><div class="fig-brand-name" style="color:${brand.color}">${brand.name}</div><div class="fig-brand-sub">${code} · ${TASKS.filter(t=>t.brand===code).length} campaigns</div></div>
+      </div>
+      <a class="fig-link" href="${brand.figma}" target="_blank" rel="noopener" onclick="recordOpen('${code}')">🔗 Open in Figma</a>
+      <div class="fig-status">
+        <div class="fig-status-dot" style="background:${dot}"></div>
+        <span>${status}</span>
+        <span class="fig-last">Opened: ${ts?fmtDT(+ts):'—'}</span>
+      </div>`;
+    grid.appendChild(card);
+  });
+}
+
+// ─── SATISFACTION PANEL ───────────────────────────────────────────────────
+function renderSatisfaction(){
+  // Compute live metrics from TASKS
+  const total = TASKS.length;
+  const delivered = TASKS.filter(t=>t.stage==='delivered');
+  const active = TASKS.filter(t=>t.stage!=='delivered');
+
+  // Delivery rate
+  const deliveryRate = Math.round(delivered.length / total * 100);
+
+  // On-time: delivered tasks that were not overdue at delivery (due >= their date — we treat non-null due as approximation)
+  const intApproved = delivered.filter(t=>t.int===1).length;
+  const extApproved = delivered.filter(t=>t.ext===1).length;
+  const intRate = delivered.length ? Math.round(intApproved/delivered.length*100) : 0;
+  const extRate = delivered.length ? Math.round(extApproved/delivered.length*100) : 0;
+
+  // Overall overdue in active tasks
+  const ovActive = active.filter(t=>isOv(t.due)).length;
+  const onTimeRate = active.length ? Math.round((active.length-ovActive)/active.length*100) : 100;
+
+  // Comment load (more comments = more revision friction)
+  const totalCmt = TASKS.reduce((s,t)=>s+(t.cmt||0),0);
+  const avgCmt = totalCmt ? (totalCmt/total).toFixed(1) : '0';
+
+  // Overall composite score (weighted)
+  const composite = Math.round(deliveryRate*0.35 + intRate*0.25 + extRate*0.25 + onTimeRate*0.15);
+
+  // Hero section
+  const gr = gradeFromPct(composite);
+  const hero = document.getElementById('sat-hero');
+  hero.innerHTML=`
+    <div class="sat-score-ring">
+      ${ring(composite,'#00D7B9',100)}
+      <div class="sat-score-label">
+        <span class="sat-score-n" style="color:#00D7B9">${composite}</span>
+        <span class="sat-score-sub">/ 100</span>
+      </div>
+    </div>
+    <div class="sat-hero-info">
+      <div class="sat-hero-title">Stakeholder Satisfaction</div>
+      <div class="sat-hero-sub">Composite score across delivery, internal and external approvals, and active task health. Feeds from Asana task data via GitHub Actions sync.</div>
+      <div class="sat-kpi-row">
+        <div class="sat-kpi"><div class="sat-kpi-v" style="color:#00D7B9">${deliveryRate}%</div><div class="sat-kpi-l">Delivery Rate</div></div>
+        <div class="sat-kpi"><div class="sat-kpi-v" style="color:#3FBB68">${intRate}%</div><div class="sat-kpi-l">INT Approved</div></div>
+        <div class="sat-kpi"><div class="sat-kpi-v" style="color:#4F85F8">${extRate}%</div><div class="sat-kpi-l">EXT Approved</div></div>
+        <div class="sat-kpi"><div class="sat-kpi-v" style="color:${onTimeRate>=80?'#F5A823':'#E85560'}">${onTimeRate}%</div><div class="sat-kpi-l">On-Time Active</div></div>
+      </div>
+    </div>`;
+
+  // Process breakdown
+  const satGrid = document.getElementById('sat-grid');
+  satGrid.innerHTML='';
+
+  // Process health card
+  const procCard = el('div','sat-card');
+  procCard.innerHTML=`<div class="sat-card-title"><span class="sat-ico">⚙️</span> Process Health by Stage</div>`;
+  const processes = [
+    {label:'Copy',stages:COPY_STAGES,color:'#4F85F8'},
+    {label:'Design',stages:DESIGN_STAGES,color:'#AB7DFF'},
+    {label:'Development / Final',stages:DEV_STAGES,color:'#F5A823'},
+  ];
+  processes.forEach(proc=>{
+    const procTasks = TASKS.filter(t=>proc.stages.includes(t.stage));
+    const procOv = procTasks.filter(t=>isOv(t.due)).length;
+    const health = procTasks.length ? Math.round((procTasks.length-procOv)/procTasks.length*100) : 100;
+    const badgeColor = health>=80?'rgba(0,215,185,.15)':health>=60?'rgba(245,168,35,.15)':'rgba(232,50,74,.15)';
+    const badgeText  = health>=80?'#00D7B9':health>=60?'#F5A823':'#E85560';
+    const row = el('div','process-row');
+    row.innerHTML=`
+      <span class="process-name" style="color:${proc.color}">${proc.label}</span>
+      <div class="process-bar-wrap"><div class="process-bar-fill" style="background:${proc.color};width:0%" data-w="${health}"></div></div>
+      <span class="process-pct" style="color:${proc.color}">${health}%</span>
+      <span class="process-badge" style="background:${badgeColor};color:${badgeText}">${procTasks.length} tasks · ${procOv} overdue</span>`;
+    procCard.appendChild(row);
+  });
+  satGrid.appendChild(procCard);
+
+  // Approval pipeline card
+  const appCard = el('div','sat-card');
+  appCard.innerHTML=`<div class="sat-card-title"><span class="sat-ico">✅</span> Approval Pipeline</div>`;
+  const appRows = [
+    {label:'INT delivered',val:intApproved,total:delivered.length,color:'#3FBB68'},
+    {label:'EXT delivered',val:extApproved,total:delivered.length,color:'#4F85F8'},
+    {label:'EXT pending',val:delivered.filter(t=>t.ext===0).length,total:delivered.length,color:'#F5A823'},
+    {label:'Avg comments/task',val:avgCmt,total:null,color:'#AB7DFF'},
+  ];
+  appRows.forEach(row=>{
+    const pct=row.total?Math.round(row.val/row.total*100):null;
+    const r=el('div','process-row');
+    r.innerHTML=`<span class="process-name">${row.label}</span>
+      ${pct!=null?`<div class="process-bar-wrap"><div class="process-bar-fill" style="background:${row.color};width:0%" data-w="${pct}"></div></div>`:``}
+      <span class="process-pct" style="color:${row.color}">${pct!=null?pct+'%':row.val}</span>`;
+    appCard.appendChild(r);
+  });
+  satGrid.appendChild(appCard);
+
+  // Comment sentiment feed card
+  const cmtCard = el('div','sat-card');
+  cmtCard.innerHTML=`<div class="sat-card-title"><span class="sat-ico">💬</span> Comment Sentiment Feed</div>`;
+  const pos = COMMENT_FEED.filter(c=>c.sent==='pos').length;
+  const neg = COMMENT_FEED.filter(c=>c.sent==='neg').length;
+  const sentScore = Math.round(pos/(pos+neg)*100);
+  const sentRow = el('div','process-row');
+  sentRow.innerHTML=`<span class="process-name">Positive sentiment</span>
+    <div class="process-bar-wrap"><div class="process-bar-fill" style="background:var(--teal);width:0%" data-w="${sentScore}"></div></div>
+    <span class="process-pct" style="color:var(--teal)">${sentScore}%</span>`;
+  cmtCard.appendChild(sentRow);
+  COMMENT_FEED.forEach(c=>{
+    const brand=BRANDS[c.brand];
+    const div=el('div','sat-comment');
+    div.innerHTML=`<div class="sat-comment-sent ${c.sent}">${c.sent==='pos'?'↑':c.sent==='neg'?'↓':'·'}</div>
+      <div class="sat-comment-text">
+        <span class="sat-comment-brand" style="background:${brand.bg};color:${brand.color}">${c.brand}</span>
+        ${c.text}
+        <div class="sat-comment-meta">${c.who} · ${c.date}</div>
+      </div>`;
+    cmtCard.appendChild(div);
+  });
+  satGrid.appendChild(cmtCard);
+
+  // Brand satisfaction grid
+  const bsg = document.getElementById('brand-sat-grid');
+  bsg.innerHTML='';
+  Object.entries(BRANDS).forEach(([code,brand])=>{
+    const bt = TASKS.filter(t=>t.brand===code);
+    const d  = bt.filter(t=>t.stage==='delivered');
+    const extOk = d.filter(t=>t.ext===1).length;
+    const intOk = d.filter(t=>t.int===1).length;
+    const ov = bt.filter(t=>t.stage!=='delivered'&&isOv(t.due)).length;
+    const score = bt.length ? Math.round(
+      (d.length/bt.length)*40 +
+      (d.length?extOk/d.length:0)*35 +
+      (d.length?intOk/d.length:0)*25
+    ) : 0;
+    const card = el('div','brand-sat-card');
+    card.innerHTML=`
+      <div class="brand-sat-icon" style="background:${brand.bg}">${SP[brand.species]}</div>
+      <div class="brand-sat-info">
+        <div class="brand-sat-name" style="color:${brand.color}">${brand.name}</div>
+        <div style="display:flex;align-items:baseline;gap:6px">
+          <div class="brand-sat-score" style="color:${brand.color}">${score}</div>
+          <div class="brand-sat-sub">/100${ov?` · <span style="color:var(--red)">⚠ ${ov} overdue</span>`:''}</div>
+        </div>
+        <div class="brand-sat-bar"><div class="brand-sat-fill" style="background:${brand.color};width:0%" data-w="${score}"></div></div>
+      </div>`;
+    bsg.appendChild(card);
+  });
+
+  // Animate all bars + rings
+  setTimeout(()=>{
+    document.querySelectorAll('#vs .process-bar-fill[data-w], #vs .brand-sat-fill[data-w]').forEach(e=>e.style.width=e.dataset.w+'%');
+    animateRings();
+  },80);
+}
+
+// ─── VIEW SWITCHING ───────────────────────────────────────────────────────
+function setView(id,btn){
+  ['vk','vb','vc','vf','vs'].forEach(v=>document.getElementById(v).hidden=v!==id);
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t===btn));
+  if(id==='vc')setTimeout(()=>{animateRings();document.querySelectorAll('.cl-bar-fill[data-w]').forEach(e=>e.style.width=e.dataset.w+'%');},50);
+  if(id==='vb')setTimeout(()=>{document.querySelectorAll('.br-fill[data-w]').forEach(e=>e.style.width=e.dataset.w+'%');},50);
+  if(id==='vs')renderSatisfaction();
+}
+
+// ─── LIVE DATA LOADER ────────────────────────────────────────────────────
+const DEMO_TASKS = [...TASKS];
+
+function applyLiveData(json) {
+  if (!json || !Array.isArray(json.tasks) || !json.tasks.length) return false;
+  const live = json.tasks.map(t => {
+    const whoKey = Object.entries(PEOPLE).find(([,p]) => p.initials === t.who)?.[0] || null;
+    return {
+      id:    t.id,
+      name:  t.name,
+      brand: t.brand,
+      stage: t.stage,
+      type:  t.type || 'General',
+      who:   whoKey || t.who,
+      due:   t.due   || '',
+      cmt:   t.cmt   || 0,
+      ss:    t.ss    || null,
+      int:   t.int   != null ? t.int : (t.stage === 'delivered' ? 1 : undefined),
+      ext:   t.ext   != null ? t.ext : undefined,
+    };
+  });
+  TASKS.length = 0;
+  live.forEach(t => TASKS.push(t));
+  const sub = document.querySelector('.brand-sub');
+  if (sub) {
+    const ts = json.updated_at ? ' · ' + json.updated_at : '';
+    sub.innerHTML = `<span class="pulse"></span>effem.com · live${ts}`;
+  }
+  return true;
+}
+
+async function loadLiveData() {
+  try {
+    const resp = await fetch('./data.json', { cache: 'no-cache' });
+    if (!resp.ok) throw new Error(resp.status);
+    const json = await resp.json();
+    const applied = applyLiveData(json);
+    if (applied) {
+      try { localStorage.setItem('mars-sync', Date.now()); } catch(e) {}
+      loadSyncTime();
+    }
+  } catch (_) {
+    // Running as artifact or data.json not yet generated — use demo data silently
+  }
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────
+function render(){renderStats();renderToday();renderSidebar();renderKanban();renderBandwidth();renderClients();renderFigmaGrid();}
+loadSyncTime();
+loadLiveData().then(render);
+</script>
