@@ -28,6 +28,8 @@ HEADERS = {"Authorization": f"Bearer {PAT}", "Accept": "application/json"}
 BASE    = "https://app.asana.com/api/1.0"
 
 PROJECT_CRM = "1211470217061171"   # effem.com › CRM project
+USER_GID     = "1202482767149060"   # Lucia Mora — user task list owner
+WORKSPACE_GID = "10771190738190"    # effem.com workspace
 
 # Section GID → dashboard stage
 SECTION_STAGES = {
@@ -91,7 +93,31 @@ def asana_get(path: str, params: dict = None) -> dict:
     resp.raise_for_status()
     return resp.json()
 
+def detect_stage_from_name(name: str) -> str:
+    """Infer dashboard stage from task name suffix (for My Tasks items with no section)."""
+    n = name.lower()
+    if "final email design" in n or "production" in n:
+        return "final"
+    if "within edits" in n or "edits applied" in n or "packaging" in n:
+        return "inprocess"
+    if "draft creative" in n or "design" in n or "creative" in n:
+        return "design"
+    if "copy" in n or "brief" in n:
+        return "with-copy"
+    return "inprocess"
+
 # ─── Fetch tasks ─────────────────────────────────────────────────────────
+def fetch_user_task_list(user_gid: str, workspace_gid: str) -> list:
+    """Fetch all incomplete tasks from the user's personal My Tasks list."""
+    utl = asana_get(f"/users/{user_gid}/user_task_list", {"workspace": workspace_gid})
+    utl_gid = utl["data"]["gid"]
+    data = asana_get(f"/user_task_lists/{utl_gid}/tasks", {
+        "opt_fields": "gid,name,due_on,num_comments,completed",
+        "limit": 100,
+        "completed_since": "now",
+    })
+    return [t for t in data.get("data", []) if not t.get("completed")]
+
 def fetch_incomplete_tasks(section_gid: str) -> list:
     data = asana_get(f"/sections/{section_gid}/tasks", {
         "opt_fields": "gid,name,due_on,assignee.name,assignee.gid,num_comments",
@@ -166,6 +192,33 @@ for t in fetch_completed_tasks(DESIGN_SECTION):
         "cmt":       0,
         "int":       1,
         "ext":       0,
+    })
+
+# My Tasks (personal list) — catches tasks with no project/section membership
+for t in fetch_user_task_list(USER_GID, WORKSPACE_GID):
+    gid = t["gid"]
+    if gid in seen_gids:
+        continue
+    brand = detect_brand(t["name"])
+    if not brand:
+        continue
+    seen_gids.add(gid)
+
+    due = t.get("due_on") or ""
+    stage = detect_stage_from_name(t["name"])
+    if stage == "design" and due and due < TODAY:
+        stage = "final"
+
+    tasks.append({
+        "id":        short_id(gid),
+        "asana_gid": gid,
+        "name":      clean_name(t["name"]),
+        "brand":     brand,
+        "stage":     stage,
+        "type":      detect_type(t["name"]),
+        "who":       "LM",
+        "due":       due,
+        "cmt":       t.get("num_comments", 0),
     })
 
 # ─── Write output ─────────────────────────────────────────────────────────
