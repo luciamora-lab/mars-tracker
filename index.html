@@ -89,6 +89,16 @@ body{
 .tab{background:none;border:none;color:var(--mu);font:12px 'Inter',sans-serif;padding:5px 11px;border-radius:5px;cursor:pointer;transition:all .15s;white-space:nowrap}
 .tab.on{background:var(--acc);color:#fff;font-weight:600;box-shadow:0 2px 10px rgba(59,59,245,.4)}
 
+/* Spotlight button */
+.spotlight-btn{display:flex;align-items:center;gap:5px;background:none;border:1px solid var(--bd);border-radius:7px;color:var(--mu);font:11px 'Inter',sans-serif;padding:5px 10px;cursor:pointer;transition:all .2s;white-space:nowrap}
+.spotlight-btn:hover{background:rgba(171,125,255,.1);border-color:rgba(171,125,255,.4);color:#AB7DFF}
+.spotlight-btn.spotlight-on{background:rgba(171,125,255,.18);border-color:#AB7DFF;color:#AB7DFF;box-shadow:0 0 12px rgba(171,125,255,.3)}
+.spotlight-dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0}
+/* Hide-col button on kanban column headers */
+.col-hide-btn{background:none;border:none;color:var(--dm);font-size:10px;cursor:pointer;padding:2px 4px;border-radius:3px;line-height:1;transition:color .12s,background .12s}
+.col-hide-btn:hover{background:var(--sf3);color:var(--fg2)}
+.col-show-strip{display:flex;align-items:center;justify-content:center;width:28px;flex-shrink:0;background:var(--sf);border:1px solid var(--bd);border-radius:8px;cursor:pointer;writing-mode:vertical-rl;font-size:9.5px;font-weight:700;color:var(--dm);letter-spacing:.06em;transition:background .12s,color .12s;padding:10px 0}
+.col-show-strip:hover{background:var(--sf2);color:var(--fg2)}
 .refresh-wrap{display:flex;flex-direction:column;align-items:flex-end}
 .refresh-btn{display:flex;align-items:center;gap:5px;background:none;border:1px solid var(--bd);border-radius:7px;color:var(--mu);font:11px 'Inter',sans-serif;padding:5px 10px;cursor:pointer;transition:all .15s}
 .refresh-btn:hover{background:var(--sf3);color:var(--fg);border-color:var(--bd2)}
@@ -320,6 +330,9 @@ body{
     </div>
     <div class="chips" id="stat-chips"></div>
     <div class="topbar-right">
+      <button class="spotlight-btn" id="spotlight-btn" onclick="toggleSpotlight()" title="Spotlight: My Tasks">
+        <span class="spotlight-dot"></span> Spotlight
+      </button>
       <div class="refresh-wrap">
         <button class="refresh-btn" id="refresh-btn" onclick="doRefresh()"><span class="ri">↺</span> Refresh</button>
         <div class="last-sync" id="last-sync">Never synced</div>
@@ -426,17 +439,18 @@ const STAGES = [
 ];
 
 const PEOPLE = {
-  LM:{name:'Lucia Mora',    initials:'LM',color:'#AB7DFF'},
-  KM:{name:'Karan Matlani', initials:'KM',color:'#4F85F8'},
-  RI:{name:'Rina',          initials:'RI',color:'#FF7A52'},
-  NI:{name:'Nico',          initials:'NI',color:'#3FBB68'},
-  CA:{name:'Carla',         initials:'CA',color:'#00D7B9'},
-  MA:{name:'Manuel',        initials:'MA',color:'#F5A623'},
-  LE:{name:'Leo',           initials:'LE',color:'#E85560'},
-  AN:{name:'Andrea',        initials:'AN',color:'#C49B6C'},
-  EM:{name:'Emily',         initials:'EM',color:'#4F85F8'},
-  CY:{name:'Carly',         initials:'CY',color:'#D4962A'},
+  LM:{name:'Lucia Mora',      initials:'LM',title:'Senior Lifecycle Designer',role:'designer', color:'#AB7DFF'},
+  KM:{name:'Karan Matlani',   initials:'KM',title:'Lifecycle Specialist',     role:'specialist',color:'#4F85F8'},
+  RI:{name:'Rina Anzarut',    initials:'RI',title:'Email Account Manager',    role:'account',  color:'#FF7A52'},
+  NI:{name:'Nico Yepes',      initials:'NI',title:'Email Specialist',         role:'specialist',color:'#3FBB68'},
+  CA:{name:'Carla Donahue',   initials:'CA',title:'Sr. Director, Lifecycle',  role:'director', color:'#00D7B9'},
+  MA:{name:'Manuel Rodriguez',initials:'MA',title:'Email Coder',              role:'coder',    color:'#F5A623'},
+  LE:{name:'Leo Diaz',        initials:'LE',title:'Email Coder',              role:'coder',    color:'#E85560'},
+  AN:{name:'Andrea',          initials:'AN',title:'Brand Reviewer',           role:'client',   color:'#C49B6C'},
+  EM:{name:'Emily',           initials:'EM',title:'Brand Contact',            role:'client',   color:'#4F85F8'},
+  CY:{name:'Carly',           initials:'CY',title:'Operations',               role:'ops',      color:'#D4962A'},
 };
+const SPOTLIGHT_USER = 'LM'; // Lucia is the only designer
 
 function sp(task) {
   const n = task.name;
@@ -492,8 +506,26 @@ const COMMENT_FEED = [
 ];
 
 // ─── STATE ────────────────────────────────────────────────────────────────
-let activeBrand='ALL', activeType='ALL';
-const filtered=()=>TASKS.filter(t=>(activeBrand==='ALL'||t.brand===activeBrand)&&(activeType==='ALL'||t.type===activeType));
+let activeBrand='ALL', activeType='ALL', spotlightOn=false;
+let hiddenCols=new Set();
+try{hiddenCols=new Set(JSON.parse(localStorage.getItem('mars-hidden-cols')||'[]'));}catch(e){}
+const filtered=()=>TASKS.filter(t=>
+  (activeBrand==='ALL'||t.brand===activeBrand)&&
+  (activeType==='ALL'||t.type===activeType)&&
+  (!spotlightOn||t.who===SPOTLIGHT_USER)
+);
+function toggleSpotlight(){
+  spotlightOn=!spotlightOn;
+  const btn=document.getElementById('spotlight-btn');
+  btn.classList.toggle('spotlight-on',spotlightOn);
+  btn.title=spotlightOn?'Exit Spotlight':'Spotlight: My Tasks';
+  render();
+}
+function toggleCol(stageId){
+  hiddenCols.has(stageId)?hiddenCols.delete(stageId):hiddenCols.add(stageId);
+  try{localStorage.setItem('mars-hidden-cols',JSON.stringify([...hiddenCols]));}catch(e){}
+  renderKanban();
+}
 const isOv=(d)=>d&&new Date(d)<TODAY;
 const fmtD=(d)=>d?new Date(d).toLocaleDateString('en-US',{month:'short',day:'numeric'}):'';
 const fmtDT=(ts)=>{if(!ts)return'—';const d=new Date(ts);return d.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' · '+d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});};
@@ -607,9 +639,16 @@ function renderSidebar(){
   const tg=el('div','team-grid');
   Object.entries(PEOPLE).forEach(([k,p])=>{
     const c=TASKS.filter(t=>t.who===k&&t.stage!=='delivered').length;
+    const isDesigner=p.role==='designer';
     const w=el('div','team-av-wrap');
-    w.title=`${p.name}${c?' · '+c+' active':''}`;
-    w.innerHTML=`<div class="person-av" style="background:${p.color};${c?'box-shadow:0 0 0 2px rgba(255,255,255,.15)':''}">${p.initials}</div><span class="team-av-name">${p.name.split(' ')[0]}</span>`;
+    w.title=`${p.name} · ${p.title}${c?' · '+c+' active':''}`;
+    const ring=isDesigner?`box-shadow:0 0 0 2px #AB7DFF,0 0 8px rgba(171,125,255,.4)`:'';
+    w.innerHTML=`
+      <div style="position:relative;display:inline-block">
+        <div class="person-av" style="background:${p.color};${ring}">${p.initials}</div>
+        ${isDesigner?`<span style="position:absolute;top:-4px;right:-4px;font-size:8px;background:#AB7DFF;color:#fff;border-radius:50%;width:12px;height:12px;display:flex;align-items:center;justify-content:center;font-weight:700">✦</span>`:''}
+      </div>
+      <span class="team-av-name">${p.name.split(' ')[0]}</span>`;
     tg.appendChild(w);
   });
   tl.appendChild(tg);
@@ -641,13 +680,28 @@ function renderKanban(){
   const track=document.getElementById('kanban-track');track.innerHTML='';
   const tasks=filtered();
   STAGES.forEach(stage=>{
+    // Hidden column — show a slim vertical strip to restore it
+    if(hiddenCols.has(stage.id)){
+      const strip=el('div','col-show-strip');
+      strip.title=`Show ${stage.label}`;
+      strip.textContent=stage.label;
+      strip.style.borderTopColor=stage.color;
+      strip.style.borderTopWidth='2px';
+      strip.onclick=()=>toggleCol(stage.id);
+      track.appendChild(strip);
+      return;
+    }
     const st=tasks.filter(t=>t.stage===stage.id);
     const col=el('div','col');
     const head=el('div','col-h');
     head.style.borderBottomColor=stage.color;
     const ovCount=st.filter(t=>isOv(t.due)).length;
     const ovBadge=ovCount?` <span style="font-size:9px;font-weight:700;padding:1px 5px;border-radius:4px;background:rgba(232,50,74,.15);color:var(--red)">⚠${ovCount}</span>`:'';
-    head.innerHTML=`<div style="width:8px;height:8px;border-radius:50%;background:${stage.color};flex-shrink:0"></div><span class="col-h-lbl" style="color:${stage.color}">${stage.label}</span><span class="col-h-n">${st.length}</span>${ovBadge}`;
+    head.innerHTML=`
+      <div style="width:8px;height:8px;border-radius:50%;background:${stage.color};flex-shrink:0"></div>
+      <span class="col-h-lbl" style="color:${stage.color}">${stage.label}</span>
+      <span class="col-h-n">${st.length}</span>${ovBadge}
+      <button class="col-hide-btn" title="Hide column" onclick="toggleCol('${stage.id}')">✕</button>`;
     const body=el('div','col-b');
     if(!st.length)body.appendChild(el('div','empty-col','—'));
     else st.forEach((t,i)=>body.appendChild(renderCard(t,i*30)));
