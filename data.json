@@ -220,7 +220,7 @@
       "stage": "inprocess",
       "type": "Holiday",
       "who": "LM",
-      "due": "2026-10-20",
+      "due": "2026-10-22",
       "cmt": 0
     },
     {
@@ -231,7 +231,7 @@
       "stage": "final",
       "type": "Holiday",
       "who": "LM",
-      "due": "2026-10-16",
+      "due": "2026-10-20",
       "cmt": 0
     },
     {
