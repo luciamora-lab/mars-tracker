@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-20",
+  "updated_at": "2026-10-21",
   "source": "asana-live",
   "project": "1211470217061171",
   "tasks": [
@@ -85,7 +85,7 @@
       "asana_gid": "1219284217796637",
       "name": "GRN Holiday Contingency Email_Final Email Design",
       "brand": "GRN",
-      "stage": "design",
+      "stage": "final",
       "type": "Holiday",
       "who": "LM",
       "due": "2026-10-20",
@@ -96,7 +96,7 @@
       "asana_gid": "1219283947218783",
       "name": "CSR Holiday Contingency Email_Final Email Design",
       "brand": "CSR",
-      "stage": "design",
+      "stage": "final",
       "type": "Holiday",
       "who": "LM",
       "due": "2026-10-20",
