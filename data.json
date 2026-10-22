@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-21",
+  "updated_at": "2026-10-22",
   "source": "asana-live",
   "project": "1211470217061171",
   "tasks": [
@@ -63,7 +63,7 @@
       "asana_gid": "1219284166479252",
       "name": "PED Holiday Contingency Email_Final Email Design",
       "brand": "PED",
-      "stage": "design",
+      "stage": "final",
       "type": "Holiday",
       "who": "LM",
       "due": "2026-10-21",
@@ -74,7 +74,7 @@
       "asana_gid": "1219284009358181",
       "name": "IAMS Holiday Contingency Email_Final Email Design",
       "brand": "IAM",
-      "stage": "design",
+      "stage": "final",
       "type": "Holiday",
       "who": "LM",
       "due": "2026-10-21",
