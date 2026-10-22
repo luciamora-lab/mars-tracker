@@ -74,10 +74,10 @@
       "asana_gid": "1219284009358181",
       "name": "IAMS Holiday Contingency Email_Final Email Design",
       "brand": "IAM",
-      "stage": "final",
+      "stage": "design",
       "type": "Holiday",
       "who": "LM",
-      "due": "2026-10-21",
+      "due": "2026-10-22",
       "cmt": 0
     },
     {
@@ -221,17 +221,6 @@
       "type": "Holiday",
       "who": "LM",
       "due": "2026-10-22",
-      "cmt": 0
-    },
-    {
-      "id": 39850,
-      "asana_gid": "1219284009439850",
-      "name": "IAMS Holiday Contingency Email_Draft Creative",
-      "brand": "IAM",
-      "stage": "final",
-      "type": "Holiday",
-      "who": "LM",
-      "due": "2026-10-20",
       "cmt": 0
     },
     {
