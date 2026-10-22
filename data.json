@@ -242,18 +242,7 @@
       "stage": "inprocess",
       "type": "Holiday",
       "who": "LM",
-      "due": "2026-10-20",
-      "cmt": 0
-    },
-    {
-      "id": 79435,
-      "asana_gid": "1219284217879435",
-      "name": "GRN Holiday Contingency Email_Draft Creative",
-      "brand": "GRN",
-      "stage": "final",
-      "type": "Holiday",
-      "who": "LM",
-      "due": "2026-10-16",
+      "due": "2026-10-23",
       "cmt": 0
     },
     {
@@ -262,17 +251,6 @@
       "name": "CSR Holiday Contingency Email_WITHIN Edits Applied",
       "brand": "CSR",
       "stage": "inprocess",
-      "type": "Holiday",
-      "who": "LM",
-      "due": "",
-      "cmt": 0
-    },
-    {
-      "id": 13928,
-      "asana_gid": "1219283879313928",
-      "name": "CSR Holiday Contingency Email_Draft Creative",
-      "brand": "CSR",
-      "stage": "design",
       "type": "Holiday",
       "who": "LM",
       "due": "",
